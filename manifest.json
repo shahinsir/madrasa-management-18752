@@ -1,0 +1,27 @@
+{
+  "name": "মেহেরপুর আনছারুল উলূম আলিম মাদ্রাসা",
+  "short_name": "মাদ্রাসা ম্যানেজমেন্ট",
+  "description": "মাদ্রাসা ম্যানেজমেন্ট সিস্টেম - EIIN: ১৩০২৯০",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#667eea",
+  "theme_color": "#764ba2",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://i.ibb.co.com/hhVX9hp/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.ibb.co.com/gb91ZXh7/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "lang": "bn",
+  "dir": "ltr"
+}
