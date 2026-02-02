@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মাদ্রাসা ম্যানেজমেন্ট সিস্টেম</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap');
+        body { 
+            font-family: 'Hind Siliguri', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .nav-tab {
+            transition: all 0.3s ease;
+        }
+        .nav-tab.active {
+            background: #4f46e5;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .index-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .madrasa-info {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border-radius: 10px;
+            padding: 10px 15px;
+            margin-top: 10px;
+        }
+        .info-item {
+            display: inline-block;
+            margin-right: 20px;
+            font-size: 14px;
+            color: #4a5568;
+        }
+        .info-item i {
+            margin-right: 5px;
+            color: #4f46e5;
+        }
+        .user-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .admin-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .user-badge-normal {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- লগইন মডেল -->
+        <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="glass-card p-8 w-full max-w-md">
+                <h2 class="text-2xl font-bold text-center mb-6 gradient-text">লগইন করুন</h2>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">ইমেইল</label>
+                    <input type="email" id="loginEmail" class="w-full p-3 border rounded-lg" placeholder="আপনার ইমেইল">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 mb-2">পাসওয়ার্ড</label>
+                    <input type="password" id="loginPassword" class="w-full p-3 border rounded-lg" placeholder="আপনার পাসওয়ার্ড">
+                </div>
+                <div class="mb-4">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="rememberMe" class="rounded border-gray-300">
+                        <span class="ml-2 text-gray-700">আমাকে মনে রাখুন</span>
+                    </label>
+                </div>
+                <button onclick="login()" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white p-3 rounded-lg hover:opacity-90">
+                    <i class="fas fa-sign-in-alt mr-2"></i>লগইন করুন
+                </button>
+                <p class="text-center mt-4 text-gray-600 text-sm">
+                    ডিফল্ট এডমিন লগইন: admin@madrasa.com / password123
+                </p>
+            </div>
+        </div>
+
+        <!-- হেডার -->
+        <div class="glass-card p-6 mb-8 hidden" id="mainHeader">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left mb-6 md:mb-0">
+                    <div class="flex items-center justify-center md:justify-start">
+                        <h1 class="text-3xl md:text-4xl font-bold gradient-text">মেহেরপুর আনছারুল উলূম আলিম মাদ্রাসা</h1>
+                        <span id="userRoleBadge" class="user-badge ml-4"></span>
+                    </div>
+                    
+                    <!-- মাদ্রাসা তথ্য -->
+                    <div class="madrasa-info mt-3">
+                        <span class="info-item">
+                            <i class="fas fa-hashtag"></i>মাদ্রাসা কোড: <strong>১৮৭৫২</strong>
+                        </span>
+                        <span class="info-item">
+                            <i class="fas fa-id-card"></i>EIIN No: <strong>১৩০২৯০</strong>
+                        </span>
+                        <span class="info-item">
+                            <i class="fas fa-phone"></i>মোবাইল: <strong>০১৩০৯-১৩০২৯০</strong>
+                        </span>
+                        <span class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>মেহেরপুর, গোলাপগঞ্জ, সিলেট
+                        </span>
+                    </div>
+                    
+                    <p class="text-gray-600 mt-4">সম্পূর্ণ ডিজিটাল ম্যানেজমেন্ট সিস্টেম</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                        <p class="text-gray-600" id="currentDateBangla"></p>
+                        <p class="text-sm text-gray-500" id="currentTime"></p>
+                        <button onclick="logout()" class="text-sm text-red-600 hover:text-red-800 mt-1">
+                            <i class="fas fa-sign-out-alt mr-1"></i>লগআউট
+                        </button>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                        MA
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- নেভিগেশন ট্যাব -->
+        <div class="glass-card p-4 mb-8 hidden" id="navTabs">
+            <div class="flex flex-wrap gap-2 justify-center">
+                <button onclick="showSection('dashboard')" id="tab-dashboard" class="nav-tab px-6 py-3 rounded-lg bg-blue-50 text-blue-700 font-semibold active">
+                    <i class="fas fa-tachometer-alt mr-2"></i>ড্যাশবোর্ড
+                </button>
+                <button onclick="showSection('students')" id="tab-students" class="nav-tab px-6 py-3 rounded-lg bg-green-50 text-green-700 font-semibold">
+                    <i class="fas fa-user-graduate mr-2"></i>ছাত্র-ছাত্রী
+                </button>
+                <button onclick="showSection('teachers')" id="tab-teachers" class="nav-tab px-6 py-3 rounded-lg bg-purple-50 text-purple-700 font-semibold">
+                    <i class="fas fa-chalkboard-teacher mr-2"></i>শিক্ষক-কর্মচারী
+                </button>
+                <button onclick="showSection('finance')" id="tab-finance" class="nav-tab px-6 py-3 rounded-lg bg-red-50 text-red-700 font-semibold">
+                    <i class="fas fa-money-bill-wave mr-2"></i>আর্থিক ব্যবস্থাপনা
+                </button>
+            </div>
+        </div>
+
+        <!-- ড্যাশবোর্ড সেকশন -->
+        <div id="section-dashboard" class="section-content hidden">
+            <!-- সারাংশ কার্ড -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+                <div class="bg-gradient-to-r from-green-500 to-green-600 p-6 rounded-2xl text-white shadow-lg transform hover:scale-105 transition duration-300">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg">মোট ছাত্র-ছাত্রী</h3>
+                        <i class="fas fa-user-graduate text-2xl opacity-50"></i>
+                    </div>
+                    <p class="text-3xl font-bold mt-2"><span id="totalStudents">0</span></p>
+                    <p class="text-sm opacity-80 mt-1">সকল শ্রেণির</p>
+                </div>
+
+                <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-6 rounded-2xl text-white shadow-lg transform hover:scale-105 transition duration-300">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg">মোট শিক্ষক-কর্মচারী</h3>
+                        <i class="fas fa-chalkboard-teacher text-2xl opacity-50"></i>
+                    </div>
+                    <p class="text-3xl font-bold mt-2"><span id="totalTeachers">0</span></p>
+                    <p class="text-sm opacity-80 mt-1">সকল বিভাগ</p>
+                </div>
+
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-2xl text-white shadow-lg transform hover:scale-105 transition duration-300">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg">মাসিক আয়</h3>
+                        <i class="fas fa-arrow-up text-2xl opacity-50"></i>
+                    </div>
+                    <p class="text-3xl font-bold mt-2">৳ <span id="monthlyIncome">0</span></p>
+                    <p class="text-sm opacity-80 mt-1">এই মাসের</p>
+                </div>
+
+                <div class="bg-gradient-to-r from-red-500 to-red-600 p-6 rounded-2xl text-white shadow-lg transform hover:scale-105 transition duration-300">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg">মাসিক ব্যয়</h3>
+                        <i class="fas fa-arrow-down text-2xl opacity-50"></i>
+                    </div>
+                    <p class="text-3xl font-bold mt-2">৳ <span id="monthlyExpense">0</span></p>
+                    <p class="text-sm opacity-80 mt-1">এই মাসের</p>
+                </div>
+            </div>
+
+            <!-- রিসেন্ট অ্যাক্টিভিটি -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card p-6">
+                    <h3 class="text-xl font-bold mb-4 text-gray-700 flex items-center">
+                        <i class="fas fa-history mr-2 text-blue-500"></i>
+                        সাম্প্রতিক লেনদেন
+                    </h3>
+                    <div class="space-y-4 max-h-80 overflow-y-auto">
+                        <div id="recentTransactions" class="space-y-3">
+                            <!-- রিসেন্ট লেনদেন -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6">
+                    <h3 class="text-xl font-bold mb-4 text-gray-700 flex items-center">
+                        <i class="fas fa-chart-pie mr-2 text-green-500"></i>
+                        শ্রেণি ভিত্তিক ছাত্র সংখ্যা
+                    </h3>
+                    <div class="space-y-3">
+                        <div id="classDistribution">
+                            <!-- শ্রেণি ভিত্তিক ডিস্ট্রিবিউশন -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ছাত্র-ছাত্রী সেকশন -->
+        <div id="section-students" class="section-content hidden">
+            <div class="glass-card p-6 mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-700 mb-4 md:mb-0">
+                        <i class="fas fa-user-graduate mr-2 text-green-500"></i>
+                        ছাত্র-ছাত্রী তথ্য ব্যবস্থাপনা
+                    </h3>
+                    <div class="flex space-x-2">
+                        <button onclick="exportStudentData()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                            <i class="fas fa-file-export mr-2"></i>এক্সপোর্ট
+                        </button>
+                        <button id="addStudentBtn" onclick="showAddStudentModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            <i class="fas fa-user-plus mr-2"></i>নতুন ছাত্র যোগ করুন
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ফিল্টার অপশন -->
+                <div class="mb-6">
+                    <div class="flex flex-wrap gap-4 items-center">
+                        <select id="filterClass" onchange="filterStudents()" class="p-2 border rounded-lg">
+                            <option value="">সকল শ্রেণি</option>
+                            <option value="1">১ম শ্রেণি</option>
+                            <option value="2">২য় শ্রেণি</option>
+                            <option value="3">৩য় শ্রেণি</option>
+                            <option value="4">৪র্থ শ্রেণি</option>
+                            <option value="5">৫ম শ্রেণি</option>
+                            <option value="6">৬ষ্ঠ শ্রেণি</option>
+                            <option value="7">৭ম শ্রেণি</option>
+                            <option value="8">৮ম শ্রেণি</option>
+                            <option value="9">৯ম শ্রেণি</option>
+                            <option value="10">১০ম শ্রেণি</option>
+                            <option value="11">১১তম শ্রেণি</option>
+                            <option value="12">১২তম শ্রেণি</option>
+                        </select>
+                        
+                        <div class="relative">
+                            <input type="text" id="searchStudent" placeholder="ছাত্র/ছাত্রী নাম অনুসন্ধান..." 
+                                   class="p-2 pl-10 border rounded-lg w-64" onkeyup="filterStudents()">
+                            <i class="fas fa-search text-gray-400 absolute left-3 top-3"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ছাত্র টেবিল -->
+                <div class="overflow-x-auto rounded-lg border">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-3 text-left">ইনডেক্স</th>
+                                <th class="p-3 text-left">রোল নং</th>
+                                <th class="p-3 text-left">নাম</th>
+                                <th class="p-3 text-left">শ্রেণি</th>
+                                <th class="p-3 text-left">পিতার নাম</th>
+                                <th class="p-3 text-left">মোবাইল</th>
+                                <th class="p-3 text-left">গ্রাম</th>
+                                <th class="p-3 text-left">কার্যক্রম</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <!-- ছাত্র তথ্য -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- খালি অবস্থা -->
+                <div id="emptyStudents" class="text-center py-12 hidden">
+                    <i class="fas fa-user-graduate text-4xl text-gray-300 mb-4"></i>
+                    <h3 class="text-xl text-gray-500 mb-2">কোন ছাত্র-ছাত্রী নেই</h3>
+                    <p class="text-gray-400">ছাত্র-ছাত্রী তথ্য লোড হচ্ছে...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- শিক্ষক-কর্মচারী সেকশন -->
+        <div id="section-teachers" class="section-content hidden">
+            <div class="glass-card p-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-700 mb-4 md:mb-0">
+                        <i class="fas fa-chalkboard-teacher mr-2 text-purple-500"></i>
+                        শিক্ষক-কর্মচারী তথ্য ব্যবস্থাপনা
+                    </h3>
+                    <div class="flex space-x-2">
+                        <button onclick="exportTeacherData()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                            <i class="fas fa-file-export mr-2"></i>এক্সপোর্ট
+                        </button>
+                        <button id="addTeacherBtn" onclick="showAddTeacherModal()" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                            <i class="fas fa-user-tie mr-2"></i>নতুন শিক্ষক যোগ করুন
+                        </button>
+                    </div>
+                </div>
+
+                <!-- শিক্ষক টেবিল -->
+                <div class="overflow-x-auto rounded-lg border">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-3 text-left">ইনডেক্স</th>
+                                <th class="p-3 text-left">নাম</th>
+                                <th class="p-3 text-left">পদবী</th>
+                                <th class="p-3 text-left">বিষয়</th>
+                                <th class="p-3 text-left">মোবাইল</th>
+                                <th class="p-3 text-left">বেতন</th>
+                                <th class="p-3 text-left">যোগদান তারিখ</th>
+                                <th class="p-3 text-left">কার্যক্রম</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teacherTableBody">
+                            <!-- শিক্ষক তথ্য -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- খালি অবস্থা -->
+                <div id="emptyTeachers" class="text-center py-12 hidden">
+                    <i class="fas fa-chalkboard-teacher text-4xl text-gray-300 mb-4"></i>
+                    <h3 class="text-xl text-gray-500 mb-2">কোন শিক্ষক-কর্মচারী নেই</h3>
+                    <p class="text-gray-400">শিক্ষক-কর্মচারী তথ্য লোড হচ্ছে...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- আর্থিক ব্যবস্থাপনা সেকশন -->
+        <div id="section-finance" class="section-content hidden">
+            <div class="glass-card p-6 mb-6">
+                <h3 class="text-2xl font-bold text-gray-700 mb-6">
+                    <i class="fas fa-money-bill-wave mr-2 text-red-500"></i>
+                    আর্থিক হিসাব ব্যবস্থাপনা
+                </h3>
+                
+                <!-- আর্থিক সারাংশ -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-gradient-to-r from-green-500 to-green-600 p-6 rounded-2xl text-white shadow-lg">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg">মোট আয়</h3>
+                            <i class="fas fa-arrow-up text-2xl opacity-50"></i>
+                        </div>
+                        <p class="text-3xl font-bold mt-2">৳ <span id="financeIncome">0</span></p>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-red-500 to-red-600 p-6 rounded-2xl text-white shadow-lg">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg">মোট ব্যয়</h3>
+                            <i class="fas fa-arrow-down text-2xl opacity-50"></i>
+                        </div>
+                        <p class="text-3xl font-bold mt-2">৳ <span id="financeExpense">0</span></p>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-2xl text-white shadow-lg">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg">নেট ব্যালেন্স</h3>
+                            <i class="fas fa-wallet text-2xl opacity-50"></i>
+                        </div>
+                        <p class="text-3xl font-bold mt-2">৳ <span id="financeBalance">0</span></p>
+                    </div>
+                </div>
+
+                <!-- লেনদেন ফর্ম -->
+                <div id="financeForm" class="mb-8 hidden">
+                    <h4 class="text-xl font-semibold mb-4 text-gray-700">নতুন লেনদেন যোগ করুন</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <input id="financeDesc" type="text" placeholder="খাতের বিবরণ" class="p-3 border rounded-lg">
+                        <input id="financeAmount" type="number" placeholder="পরিমাণ (৳)" class="p-3 border rounded-lg">
+                        <input id="financeDate" type="date" class="p-3 border rounded-lg">
+                        <select id="financeType" class="p-3 border rounded-lg">
+                            <option value="income">আয়</option>
+                            <option value="expense">ব্যয়</option>
+                        </select>
+                        <button onclick="addFinancialTransaction()" class="bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700">
+                            <i class="fas fa-plus mr-2"></i>যোগ করুন
+                        </button>
+                    </div>
+                </div>
+
+                <!-- লেনদেন তালিকা -->
+                <div class="overflow-x-auto rounded-lg border">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-3 text-left">তারিখ</th>
+                                <th class="p-3 text-left">খাত</th>
+                                <th class="p-3 text-left">ধরণ</th>
+                                <th class="p-3 text-left text-right">পরিমাণ (৳)</th>
+                                <th class="p-3 text-left">কার্যক্রম</th>
+                            </tr>
+                        </thead>
+                        <tbody id="financeTableBody">
+                            <!-- আর্থিক লেনদেন -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ফুটার -->
+        <div class="glass-card p-6 mt-8 text-center text-gray-600 hidden" id="footer">
+            <p>© 2024 মেহেরপুর আনছারুল উলূম আলিম মাদ্রাসা। সকল অধিকার সংরক্ষিত।</p>
+            <p class="text-sm mt-2">ডেভেলপড: মাদ্রাসা ম্যানেজমেন্ট সিস্টেম টিম | মাদ্রাসা কোড: ১৮৭৫২ | EIIN No: ১৩০২৯০</p>
+            <p class="text-xs mt-1 text-blue-600" id="syncStatus">ডেটা সিঙ্কিং...</p>
+        </div>
+    </div>
+
+    <!-- মডেল ফরম -->
+    <div id="addStudentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="glass-card p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-700">নতুন ছাত্র/ছাত্রী যোগ করুন</h3>
+                <button onclick="hideModal('addStudentModal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input id="studentName" type="text" placeholder="ছাত্র/ছাত্রীর নাম*" class="p-3 border rounded-lg">
+                <input id="studentRoll" type="number" placeholder="রোল নং*" class="p-3 border rounded-lg">
+                <select id="studentClass" class="p-3 border rounded-lg">
+                    <option value="">শ্রেণি নির্বাচন করুন*</option>
+                    <option value="1">১ম শ্রেণি</option>
+                    <option value="2">২য় শ্রেণি</option>
+                    <option value="3">৩য় শ্রেণি</option>
+                    <option value="4">৪র্থ শ্রেণি</option>
+                    <option value="5">৫ম শ্রেণি</option>
+                    <option value="6">৬ষ্ঠ শ্রেণি</option>
+                    <option value="7">৭ম শ্রেণি</option>
+                    <option value="8">৮ম শ্রেণি</option>
+                    <option value="9">৯ম শ্রেণি</option>
+                    <option value="10">১০ম শ্রেণি</option>
+                    <option value="11">১১তম শ্রেণি</option>
+                    <option value="12">১২তম শ্রেণি</option>
+                </select>
+                <select id="studentGender" class="p-3 border rounded-lg">
+                    <option value="">লিঙ্গ*</option>
+                    <option value="ছাত্র">ছাত্র</option>
+                    <option value="ছাত্রী">ছাত্রী</option>
+                </select>
+                <input id="studentFather" type="text" placeholder="পিতার নাম*" class="p-3 border rounded-lg">
+                <input id="studentMother" type="text" placeholder="মাতার নাম*" class="p-3 border rounded-lg">
+                <input id="studentMobile" type="tel" placeholder="মোবাইল নম্বর" class="p-3 border rounded-lg">
+                <input id="studentEmail" type="email" placeholder="ইমেইল" class="p-3 border rounded-lg">
+                <input id="studentVillage" type="text" placeholder="গ্রাম*" class="p-3 border rounded-lg">
+                <input id="studentUpazila" type="text" placeholder="উপজেলা*" class="p-3 border rounded-lg">
+                <input id="studentDistrict" type="text" placeholder="জেলা*" class="p-3 border rounded-lg">
+                <input id="studentAdmissionDate" type="date" placeholder="ভর্তির তারিখ" class="p-3 border rounded-lg">
+            </div>
+            <div class="mt-6 flex justify-end space-x-3">
+                <button onclick="hideModal('addStudentModal')" class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50">
+                    বাতিল
+                </button>
+                <button onclick="saveStudent()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-save mr-2"></i>সংরক্ষণ করুন
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addTeacherModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="glass-card p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-700">নতুন শিক্ষক/কর্মচারী যোগ করুন</h3>
+                <button onclick="hideModal('addTeacherModal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input id="teacherName" type="text" placeholder="নাম*" class="p-3 border rounded-lg">
+                <input id="teacherId" type="text" placeholder="ইনডেক্স নম্বর*" class="p-3 border rounded-lg">
+                <select id="teacherDesignation" class="p-3 border rounded-lg">
+                    <option value="">পদবী নির্বাচন করুন*</option>
+                    <option value="অধ্যক্ষ">অধ্যক্ষ</option>
+                    <option value="উপাধ্যক্ষ">উপাধ্যক্ষ</option>
+                    <option value="প্রভাষক">প্রভাষক</option>
+                    <option value="সিনিয়র শিক্ষক">সিনিয়র শিক্ষক</option>
+                    <option value="সহকারী শিক্ষক">সহকারী শিক্ষক</option>
+                    <option value="সহকারী মৌলভী">সহকারী মৌলভী</option>
+                    <option value="ইবতেদায়ী প্রধান">ইবতেদায়ী প্রধান</option>
+                    <option value="জুনিয়র শিক্ষক">জুনিয়র শিক্ষক</option>
+                    <option value="জুনিয়র মৌলভী">জুনিয়র মৌলভী</option>
+                    <option value="ক্বারী">ক্বারী</option>
+                    <option value="অফিস সহকারী">অফিস সহকারী</option>
+                    <option value="কর্মচারী">কর্মচারী</option>
+                    <option value="অন্যান্য">অন্যান্য</option>
+                </select>
+                <input id="teacherSubject" type="text" placeholder="বিষয়/দায়িত্ব" class="p-3 border rounded-lg">
+                <input id="teacherMobile" type="tel" placeholder="মোবাইল নম্বর*" class="p-3 border rounded-lg">
+                <input id="teacherEmail" type="email" placeholder="ইমেইল" class="p-3 border rounded-lg">
+                <input id="teacherSalary" type="number" placeholder="মাসিক বেতন*" class="p-3 border rounded-lg">
+                <input id="teacherJoiningDate" type="date" placeholder="যোগদান তারিখ*" class="p-3 border rounded-lg">
+                <input id="teacherNID" type="text" placeholder="জাতীয় পরিচয়পত্র নম্বর" class="p-3 border rounded-lg">
+                <input id="teacherAddress" type="text" placeholder="বর্তমান ঠিকানা*" class="p-3 border rounded-lg">
+                <input id="teacherPermanentAddress" type="text" placeholder="স্থায়ী ঠিকানা" class="p-3 border rounded-lg">
+                <select id="teacherType" class="p-3 border rounded-lg">
+                    <option value="">প্রকার নির্বাচন করুন*</option>
+                    <option value="শিক্ষক">শিক্ষক</option>
+                    <option value="কর্মচারী">কর্মচারী</option>
+                    <option value="অন্যান্য">অন্যান্য</option>
+                </select>
+            </div>
+            <div class="mt-6 flex justify-end space-x-3">
+                <button onclick="hideModal('addTeacherModal')" class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50">
+                    বাতিল
+                </button>
+                <button onclick="saveTeacher()" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                    <i class="fas fa-save mr-2"></i>সংরক্ষণ করুন
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDaZADzHPZ_9lsWZKCkxFxo9WpI2cg81p8",
+  authDomain: "madrasa-management-18752.firebaseapp.com",
+  databaseURL: "https://madrasa-management-18752-default-rtdb.firebaseio.com",
+  projectId: "madrasa-management-18752",
+  storageBucket: "madrasa-management-18752.firebasestorage.app",
+  messagingSenderId: "917070576930",
+  appId: "1:917070576930:web:8544eadbd3edb22ef7b97b",
+  measurementId: "G-CPK42V81YC"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const auth = firebase.auth();
+
+        // ডেটা স্টোরেজ
+        let students = [];
+        let teachers = [];
+        let transactions = [];
+        let currentUser = null;
+        let currentStudentEditId = null;
+        let currentTeacherEditId = null;
+
+        // বাংলা তারিখ ফরম্যাট
+        const banglaMonths = [
+            'জানুয়ারী', 'ফেব্রুয়ারী', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
+            'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
+        ];
+        
+        const banglaDays = [
+            'রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'
+        ];
+
+        function updateBanglaDate() {
+            const now = new Date();
+            const day = banglaDays[now.getDay()];
+            const date = now.getDate();
+            const month = banglaMonths[now.getMonth()];
+            const year = now.getFullYear();
+            
+            document.getElementById('currentDateBangla').textContent = 
+                `${day}, ${date} ${month} ${year}`;
+            
+            const time = now.toLocaleTimeString('bn-BD');
+            document.getElementById('currentTime').textContent = time;
+        }
+
+        // ইউজার রোল অনুযায়ী UI কন্ট্রোল
+        function updateUIForUserRole() {
+            const isAdmin = currentUser && currentUser.role === 'admin';
+            const isViewer = currentUser && currentUser.role === 'viewer';
+            
+            // রোল বাজ দেখাও
+            const roleBadge = document.getElementById('userRoleBadge');
+            if (isAdmin) {
+                roleBadge.className = 'user-badge admin-badge';
+                roleBadge.textContent = 'এডমিন';
+            } else if (isViewer) {
+                roleBadge.className = 'user-badge user-badge-normal';
+                roleBadge.textContent = 'ইউজার';
+            }
+            
+            // এডিট বাটন কন্ট্রোল
+            const addStudentBtn = document.getElementById('addStudentBtn');
+            const addTeacherBtn = document.getElementById('addTeacherBtn');
+            const financeForm = document.getElementById('financeForm');
+            
+            if (isAdmin) {
+                addStudentBtn.classList.remove('hidden');
+                addTeacherBtn.classList.remove('hidden');
+                financeForm.classList.remove('hidden');
+                document.querySelectorAll('.edit-btn, .delete-btn').forEach(btn => {
+                    btn.classList.remove('hidden');
+                });
+            } else {
+                addStudentBtn.classList.add('hidden');
+                addTeacherBtn.classList.add('hidden');
+                financeForm.classList.add('hidden');
+                document.querySelectorAll('.edit-btn, .delete-btn').forEach(btn => {
+                    btn.classList.add('hidden');
+                });
+            }
+        }
+
+        // Firebase থেকে ডেটা লোড
+        function loadDataFromFirebase() {
+            // ছাত্র ডেটা
+            database.ref('madrasa_18752/students').on('value', (snapshot) => {
+                students = [];
+                snapshot.forEach((childSnapshot) => {
+                    students.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                loadStudents();
+                updateDashboard();
+                updateSyncStatus('ডেটা সিঙ্ক হয়েছে');
+            });
+
+            // শিক্ষক ডেটা
+            database.ref('madrasa_18752/teachers').on('value', (snapshot) => {
+                teachers = [];
+                snapshot.forEach((childSnapshot) => {
+                    teachers.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                loadTeachers();
+                updateDashboard();
+                updateSyncStatus('ডেটা সিঙ্ক হয়েছে');
+            });
+
+            // লেনদেন ডেটা
+            database.ref('madrasa_18752/transactions').on('value', (snapshot) => {
+                transactions = [];
+                snapshot.forEach((childSnapshot) => {
+                    transactions.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                loadFinancialData();
+                updateDashboard();
+                updateSyncStatus('ডেটা সিঙ্ক হয়েছে');
+            });
+        }
+
+        function updateSyncStatus(message) {
+            const syncStatus = document.getElementById('syncStatus');
+            if (syncStatus) {
+                syncStatus.textContent = message;
+                syncStatus.className = 'text-xs mt-1 text-green-600';
+                setTimeout(() => {
+                    syncStatus.className = 'text-xs mt-1 text-gray-600';
+                }, 3000);
+            }
+        }
+
+        // Firebase এ ডেটা সেভ
+        function saveToFirebase(type, data, id = null) {
+            updateSyncStatus('ডেটা সেভ হচ্ছে...');
+            const path = `madrasa_18752/${type}`;
+            
+            if (id) {
+                // এডিট
+                return database.ref(`${path}/${id}`).update(data)
+                    .then(() => {
+                        updateSyncStatus('ডেটা আপডেট হয়েছে');
+                        return true;
+                    })
+                    .catch(error => {
+                        updateSyncStatus('ত্রুটি: ' + error.message);
+                        return false;
+                    });
+            } else {
+                // নিউ
+                const newId = database.ref(path).push().key;
+                return database.ref(`${path}/${newId}`).set({ ...data, id: newId })
+                    .then(() => {
+                        updateSyncStatus('ডেটা যোগ হয়েছে');
+                        return true;
+                    })
+                    .catch(error => {
+                        updateSyncStatus('ত্রুটি: ' + error.message);
+                        return false;
+                    });
+            }
+        }
+
+        // Firebase থেকে ডিলিট
+        function deleteFromFirebase(type, id) {
+            updateSyncStatus('ডেটা মুছে ফেলা হচ্ছে...');
+            return database.ref(`madrasa_18752/${type}/${id}`).remove()
+                .then(() => {
+                    updateSyncStatus('ডেটা মুছে ফেলা হয়েছে');
+                    return true;
+                })
+                .catch(error => {
+                    updateSyncStatus('ত্রুটি: ' + error.message);
+                    return false;
+                });
+        }
+
+        // লগইন সিস্টেম
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // ডিফল্ট এডমিন লগইন
+            const defaultAdmin = {
+                email: 'admin@madrasa.com',
+                password: 'password123',
+                role: 'admin'
+            };
+            
+            const defaultViewer = {
+                email: 'user@madrasa.com',
+                password: 'viewer123',
+                role: 'viewer'
+            };
+            
+            if (email === defaultAdmin.email && password === defaultAdmin.password) {
+                currentUser = defaultAdmin;
+                handleSuccessfulLogin();
+            } else if (email === defaultViewer.email && password === defaultViewer.password) {
+                currentUser = defaultViewer;
+                handleSuccessfulLogin();
+            } else {
+                alert('ভুল ইমেইল বা পাসওয়ার্ড!');
+            }
+        }
+
+        function handleSuccessfulLogin() {
+            // লগইন মডেল লুকাও
+            document.getElementById('loginModal').classList.add('hidden');
+            
+            // মূল কন্টেন্ট দেখাও
+            document.getElementById('mainHeader').classList.remove('hidden');
+            document.getElementById('navTabs').classList.remove('hidden');
+            document.getElementById('footer').classList.remove('hidden');
+            
+            // UI আপডেট
+            updateUIForUserRole();
+            
+            // Firebase থেকে ডেটা লোড
+            loadDataFromFirebase();
+            
+            // ড্যাশবোর্ড দেখাও
+            showSection('dashboard');
+            
+            alert(`সফলভাবে লগইন হয়েছে! (রোল: ${currentUser.role === 'admin' ? 'এডমিন' : 'ইউজার'})`);
+        }
+
+        function logout() {
+            if (confirm('আপনি কি লগআউট করতে চান?')) {
+                currentUser = null;
+                
+                // সব কন্টেন্ট লুকাও
+                document.getElementById('mainHeader').classList.add('hidden');
+                document.getElementById('navTabs').classList.add('hidden');
+                document.getElementById('footer').classList.add('hidden');
+                
+                // লগইন মডেল দেখাও
+                document.getElementById('loginModal').classList.remove('hidden');
+                
+                // ফর্ম রিসেট
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+                
+                alert('সফলভাবে লগআউট হয়েছে!');
+            }
+        }
+
+        // ট্যাব নেভিগেশন
+        function showSection(sectionId) {
+            // সব সেকশন লুকাও
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // সব ট্যাব অ্যাক্টিভ ক্লাস রিমুভ
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // নির্বাচিত সেকশন দেখাও
+            document.getElementById(`section-${sectionId}`).classList.remove('hidden');
+            
+            // নির্বাচিত ট্যাব অ্যাক্টিভ করো
+            document.getElementById(`tab-${sectionId}`).classList.add('active');
+        }
+
+        // মডেল কন্ট্রোল
+        function showAddStudentModal() {
+            if (currentUser.role !== 'admin') {
+                alert('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!');
+                return;
+            }
+            document.getElementById('addStudentModal').classList.remove('hidden');
+            currentStudentEditId = null;
+            resetStudentForm();
+        }
+
+        function showEditStudentModal(studentId) {
+            if (currentUser.role !== 'admin') {
+                alert('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!');
+                return;
+            }
+            
+            const student = students.find(s => s.id === studentId);
+            if (student) {
+                currentStudentEditId = studentId;
+                
+                document.getElementById('studentName').value = student.name;
+                document.getElementById('studentRoll').value = student.roll;
+                document.getElementById('studentClass').value = student.class;
+                document.getElementById('studentGender').value = student.gender;
+                document.getElementById('studentFather').value = student.fatherName;
+                document.getElementById('studentMother').value = student.motherName;
+                document.getElementById('studentMobile').value = student.mobile;
+                document.getElementById('studentEmail').value = student.email;
+                document.getElementById('studentVillage').value = student.village;
+                document.getElementById('studentUpazila').value = student.upazila;
+                document.getElementById('studentDistrict').value = student.district;
+                document.getElementById('studentAdmissionDate').value = student.admissionDate;
+                
+                document.getElementById('addStudentModal').classList.remove('hidden');
+            }
+        }
+
+        function resetStudentForm() {
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentRoll').value = '';
+            document.getElementById('studentClass').value = '';
+            document.getElementById('studentGender').value = '';
+            document.getElementById('studentFather').value = '';
+            document.getElementById('studentMother').value = '';
+            document.getElementById('studentMobile').value = '';
+            document.getElementById('studentEmail').value = '';
+            document.getElementById('studentVillage').value = '';
+            document.getElementById('studentUpazila').value = '';
+            document.getElementById('studentDistrict').value = '';
+            document.getElementById('studentAdmissionDate').value = new Date().toISOString().split('T')[0];
+        }
+
+        function showAddTeacherModal() {
+            if (currentUser.role !== 'admin') {
+                alert('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!');
+                return;
+            }
+            document.getElementById('addTeacherModal').classList.remove('hidden');
+            currentTeacherEditId = null;
+            resetTeacherForm();
+        }
+
+        function showEditTeacherModal(teacherId) {
+            if (currentUser.role !== 'admin') {
+                alert('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!');
+                return;
+            }
+            
+            const teacher = teachers.find(t => t.id === teacherId);
+            if (teacher) {
+                currentTeacherEditId = teacherId;
+                
+                document.getElementById('teacherName').value = teacher.name;
+                document.getElementById('teacherId').value = teacher.teacherId;
+                document.getElementById('teacherDesignation').value = teacher.designation;
+                document.getElementById('teacherSubject').value = teacher.subject;
+                document.getElementById('teacherMobile').value = teacher.mobile;
+                document.getElementById('teacherEmail').value = teacher.email;
+                document.getElementById('teacherSalary').value = teacher.salary;
+                document.getElementById('teacherJoiningDate').value = teacher.joiningDate;
+                document.getElementById('teacherNID').value = teacher.nid;
+                document.getElementById('teacherAddress').value = teacher.address;
+                document.getElementById('teacherPermanentAddress').value = teacher.permanentAddress;
+                document.getElementById('teacherType').value = teacher.type;
+                
+                document.getElementById('addTeacherModal').classList.remove('hidden');
+            }
+        }
+
+        function resetTeacherForm() {
+            document.getElementById('teacherName').value = '';
+            document.getElementById('teacherId').value = '';
+            document.getElementById('teacherDesignation').value = '';
+            document.getElementById('teacherSubject').value = '';
+            document.getElementById('teacherMobile').value = '';
+            document.getElementById('teacherEmail').value = '';
+            document.getElementById('teacherSalary').value = '';
+            document.getElementById('teacherJoiningDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('teacherNID').value = '';
+            document.getElementById('teacherAddress').value = '';
+            document.getElementById('teacherPermanentAddress').value = '';
+            document.getElementById('teacherType').value = '';
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // ছাত্র ডেটা ম্যানেজমেন্ট
+        function saveStudent() {
+            if (currentUser.role !== 'admin') {
+                alert('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!');
+                return;
+            }
+            
+            const name = document.getElementById('studentName').value.trim();
+            const roll = document.getElementById('studentRoll').value.trim();
+            const studentClass = document.getElementById('studentClass').value;
+            const gender = document.getElementById('studentGender').value;
+            const fatherName = document.getElementById('studentFather').value.trim();
+            const motherName = document.getElementById('studentMother').value.trim();
+            
+            // ভ্যালিডেশন
+            if (!name || !roll || !studentClass || !gender || !fatherName || !motherName) {
+                alert('দয়া করে সকল প্রয়োজনীয় তথ্য প্রদান করুন (* চিহ্নিত ফিল্ড)');
+                return;
+            }
+            
+            const studentData = {
+                name,
+                roll: parseInt(roll),
+                class: studentClass,
+                gender,
+                fatherName,
+                motherName,
+                mobile: document.getElementById('studentMobile').value.trim(),
+                email: document.getElementById('studentEmail').value.trim(),
+                village: document.getElementById('studentVillage').value.trim(),
+                upazila: document.getElementById('studentUpazila').value.trim(),
+                district: document.getElementById('studentDistrict').value.trim(),
+                admissionDate: document.getElementById('studentAdmissionDate').value,
+                createdAt: new Date().toISOString(),
+                updatedBy: currentUser.email
+            };
+            
+            saveToFirebase('students', studentData, currentStudentEditId)
+                .then(success => {
+                    if (success) {
+                        hideModal('addStudentModal');
+                        alert(currentStudentEditId ? 'ছাত্র তথ্য আপডেট করা হয়েছে!' : 'নতুন ছাত্র যোগ করা হয়েছে!');
+                    }
+                });
+        }
+
+        function deleteStudent(studentId) {
+            if (currentUser.role !== 'admin') {
+                alert('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!');
+                return;
+            }
+            
+            if (confirm('আপনি কি এই ছাত্র/ছাত্রীর তথ্য মুছতে চান?')) {
+                deleteFromFirebase('students', studentId)
+                    .then(success => {
+                        if (success) {
+                            alert('ছাত্র/ছাত্রীর তথ্য মুছে ফেলা হয়েছে!');
+                        }
+                    });
+            }
+        }
+
+        function loadStudents() {
+            const tbody = document.getElementById('studentTableBody');
+            const emptyState = document.getElementById('emptyStudents');
+            
+            if (students.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            
+            const filteredStudents = filterStudentsList();
+            
+            tbody.innerHTML = filteredStudents.map((student, index) => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="p-3">
+                        <div class="index-badge">${index + 1}</div>
+                    </td>
+                    <td class="p-3 font-bold">${student.roll}</td>
+                    <td class="p-3">
+                        <div class="font-semibold">${student.name}</div>
+                        <div class="text-sm text-gray-500">${student.gender}</div>
+                    </td>
+                    <td class="p-3">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                            ${student.class}ম শ্রেণি
+                        </span>
+                    </td>
+                    <td class="p-3">${student.fatherName}</td>
+                    <td class="p-3">${student.mobile || 'N/A'}</td>
+                    <td class="p-3">${student.village}</td>
+                    <td class="p-3">
+                        ${currentUser.role === 'admin' ? `
+                            <button onclick="showEditStudentModal('${student.id}')" class="edit-btn text-blue-600 hover:text-blue-800 mr-3">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteStudent('${student.id}')" class="delete-btn text-red-600 hover:text-red-800">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterStudents() {
+            loadStudents();
+        }
+
+        function filterStudentsList() {
+            const filterClass = document.getElementById('filterClass').value;
+            const searchTerm = document.getElementById('searchStudent').value.toLowerCase();
+            
+            let filtered = students;
+            
+            if (filterClass) {
+                filtered = filtered.filter(s => s.class === filterClass);
+            }
+            
+            if (searchTerm) {
+                filtered = filtered.filter(s => 
+                    s.name.toLowerCase().includes(searchTerm) ||
+                    s.fatherName.toLowerCase().includes(searchTerm) ||
+                    s.roll.toString().includes(searchTerm)
+                );
+            }
+            
+            return filtered;
+        }
+
+        // শিক্ষক ডেটা ম্যানেজমেন্ট
+        function saveTeacher() {
+            if (currentUser.role !== 'admin') {
+                alert('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!');
+                return;
+            }
+            
+            const name = document.getElementById('teacherName').value.trim();
+            const teacherId = document.getElementById('teacherId').value.trim();
+            const designation = document.getElementById('teacherDesignation').value;
+            const mobile = document.getElementById('teacherMobile').value.trim();
+            const salary = document.getElementById('teacherSalary').value;
+            const joiningDate = document.getElementById('teacherJoiningDate').value;
+            const type = document.getElementById('teacherType').value;
+            
+            // ভ্যালিডেশন
+            if (!name || !teacherId || !designation || !mobile || !salary || !joiningDate || !type) {
+                alert('দয়া করে সকল প্রয়োজনীয় তথ্য প্রদান করুন (* চিহ্নিত ফিল্ড)');
+                return;
+            }
+            
+            const teacherData = {
+                name,
+                teacherId,
+                designation,
+                subject: document.getElementById('teacherSubject').value.trim(),
+                mobile,
+                email: document.getElementById('teacherEmail').value.trim(),
+                salary: parseFloat(salary),
+                joiningDate,
+                nid: document.getElementById('teacherNID').value.trim(),
+                address: document.getElementById('teacherAddress').value.trim(),
+                permanentAddress: document.getElementById('teacherPermanentAddress').value.trim(),
+                type,
+                createdAt: new Date().toISOString(),
+                updatedBy: currentUser.email
+            };
+            
+            saveToFirebase('teachers', teacherData, currentTeacherEditId)
+                .then(success => {
+                    if (success) {
+                        hideModal('addTeacherModal');
+                        alert(currentTeacherEditId ? 'শিক্ষক তথ্য আপডেট করা হয়েছে!' : 'নতুন শিক্ষক যোগ করা হয়েছে!');
+                    }
+                });
+        }
+
+        function deleteTeacher(teacherId) {
+            if (currentUser.role !== 'admin') {
+                alert('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!');
+                return;
+            }
+            
+            if (confirm('আপনি কি এই শিক্ষক/কর্মচারীর তথ্য মুছতে চান?')) {
+                deleteFromFirebase('teachers', teacherId)
+                    .then(success => {
+                        if (success) {
+                            alert('শিক্ষক/কর্মচারীর তথ্য মুছে ফেলা হয়েছে!');
+                        }
+                    });
+            }
+        }
+
+        function loadTeachers() {
+            const tbody = document.getElementById('teacherTableBody');
+            const emptyState = document.getElementById('emptyTeachers');
+            
+            if (teachers.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            
+            tbody.innerHTML = teachers.map((teacher, index) => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="p-3">
+                        <div class="index-badge">${index + 1}</div>
+                    </td>
+                    <td class="p-3 font-semibold">${teacher.name}</td>
+                    <td class="p-3">
+                        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">
+                            ${teacher.designation}
+                        </span>
+                    </td>
+                    <td class="p-3">${teacher.subject || 'N/A'}</td>
+                    <td class="p-3">${teacher.mobile}</td>
+                    <td class="p-3 font-bold">৳ ${teacher.salary.toLocaleString('bn-BD')}</td>
+                    <td class="p-3">${new Date(teacher.joiningDate).toLocaleDateString('bn-BD')}</td>
+                    <td class="p-3">
+                        ${currentUser.role === 'admin' ? `
+                            <button onclick="showEditTeacherModal('${teacher.id}')" class="edit-btn text-blue-600 hover:text-blue-800 mr-3">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteTeacher('${teacher.id}')" class="delete-btn text-red-600 hover:text-red-800">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // আর্থিক ডেটা ম্যানেজমেন্ট
+        function addFinancialTransaction() {
+            if (currentUser.role !== 'admin') {
+                alert('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!');
+                return;
+            }
+            
+            const desc = document.getElementById('financeDesc').value.trim();
+            const amount = parseFloat(document.getElementById('financeAmount').value);
+            const type = document.getElementById('financeType').value;
+            const date = document.getElementById('financeDate').value || new Date().toISOString().split('T')[0];
+            
+            if(!desc || !amount || amount <= 0) {
+                alert("দয়া করে সঠিক তথ্য দিন!");
+                return;
+            }
+            
+            const transactionData = { 
+                desc, 
+                amount, 
+                type,
+                date,
+                timestamp: new Date().toISOString(),
+                addedBy: currentUser.email
+            };
+            
+            saveToFirebase('transactions', transactionData)
+                .then(success => {
+                    if (success) {
+                        // ফর্ম রিসেট
+                        document.getElementById('financeDesc').value = '';
+                        document.getElementById('financeAmount').value = '';
+                        document.getElementById('financeDate').value = new Date().toISOString().split('T')[0];
+                        alert('লেনদেন যোগ করা হয়েছে!');
+                    }
+                });
+        }
+
+        function deleteTransaction(id) {
+            if (currentUser.role !== 'admin') {
+                alert('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!');
+                return;
+            }
+            
+            if(confirm('আপনি কি এই লেনদেনটি মুছতে চান?')) {
+                deleteFromFirebase('transactions', id)
+                    .then(success => {
+                        if (success) {
+                            alert('লেনদেন মুছে ফেলা হয়েছে!');
+                        }
+                    });
+            }
+        }
+
+        function loadFinancialData() {
+            const tbody = document.getElementById('financeTableBody');
+            let totalIncome = 0;
+            let totalExpense = 0;
+            
+            if (transactions.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="p-8 text-center text-gray-500">
+                            <i class="fas fa-receipt text-3xl mb-3"></i>
+                            <p>কোন লেনদেন নেই</p>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tbody.innerHTML = transactions.map((t, index) => {
+                    if (t.type === 'income') {
+                        totalIncome += t.amount;
+                    } else {
+                        totalExpense += t.amount;
+                    }
+                    
+                    return `
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="p-3">${new Date(t.date).toLocaleDateString('bn-BD')}</td>
+                            <td class="p-3">${t.desc}</td>
+                            <td class="p-3">
+                                <span class="px-3 py-1 rounded-full text-sm ${t.type === 'income' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                    ${t.type === 'income' ? 'আয়' : 'ব্যয়'}
+                                </span>
+                            </td>
+                            <td class="p-3 text-right font-bold ${t.type === 'income' ? 'text-green-700' : 'text-red-700'}">
+                                ৳ ${t.amount.toLocaleString('bn-BD')}
+                            </td>
+                            <td class="p-3">
+                                <span class="mr-2 text-gray-400">${index + 1}</span>
+                                ${currentUser.role === 'admin' ? `
+                                    <button onclick="deleteTransaction('${t.id}')" class="delete-btn text-red-600 hover:text-red-800">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                ` : ''}
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+            
+            // আর্থিক সারাংশ আপডেট
+            document.getElementById('financeIncome').textContent = totalIncome.toLocaleString('bn-BD');
+            document.getElementById('financeExpense').textContent = totalExpense.toLocaleString('bn-BD');
+            document.getElementById('financeBalance').textContent = (totalIncome - totalExpense).toLocaleString('bn-BD');
+        }
+
+        // ড্যাশবোর্ড আপডেট
+        function updateDashboard() {
+            // ছাত্র সংখ্যা
+            document.getElementById('totalStudents').textContent = students.length.toLocaleString('bn-BD');
+            
+            // শিক্ষক সংখ্যা
+            document.getElementById('totalTeachers').textContent = teachers.length.toLocaleString('bn-BD');
+            
+            // মাসিক আয়-ব্যয়
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            
+            const monthlyIncome = transactions
+                .filter(t => {
+                    const transDate = new Date(t.date);
+                    return t.type === 'income' && 
+                           transDate.getMonth() === currentMonth && 
+                           transDate.getFullYear() === currentYear;
+                })
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const monthlyExpense = transactions
+                .filter(t => {
+                    const transDate = new Date(t.date);
+                    return t.type === 'expense' && 
+                           transDate.getMonth() === currentMonth && 
+                           transDate.getFullYear() === currentYear;
+                })
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            document.getElementById('monthlyIncome').textContent = monthlyIncome.toLocaleString('bn-BD');
+            document.getElementById('monthlyExpense').textContent = monthlyExpense.toLocaleString('bn-BD');
+            
+            // রিসেন্ট লেনদেন
+            const recentTransactionsDiv = document.getElementById('recentTransactions');
+            const recentTransactions = transactions.slice(0, 5);
+            
+            if (recentTransactions.length === 0) {
+                recentTransactionsDiv.innerHTML = `
+                    <div class="text-center py-8 text-gray-500">
+                        <p>কোন লেনদেন নেই</p>
+                    </div>
+                `;
+            } else {
+                recentTransactionsDiv.innerHTML = recentTransactions.map((t, index) => `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div>
+                            <div class="flex items-center">
+                                <span class="index-badge mr-3 text-xs">${index + 1}</span>
+                                <p class="font-semibold">${t.desc}</p>
+                            </div>
+                            <p class="text-sm text-gray-500 ml-12">${new Date(t.date).toLocaleDateString('bn-BD')}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold ${t.type === 'income' ? 'text-green-600' : 'text-red-600'}">
+                                ৳ ${t.amount.toLocaleString('bn-BD')}
+                            </p>
+                            <span class="text-xs ${t.type === 'income' ? 'text-green-500' : 'text-red-500'}">
+                                ${t.type === 'income' ? 'আয়' : 'ব্যয়'}
+                            </span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // শ্রেণি ভিত্তিক ডিস্ট্রিবিউশন
+            const classDistribution = {};
+            students.forEach(s => {
+                classDistribution[s.class] = (classDistribution[s.class] || 0) + 1;
+            });
+            
+            const classDistributionDiv = document.getElementById('classDistribution');
+            classDistributionDiv.innerHTML = Object.keys(classDistribution).sort().map(cls => `
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-gray-600">${cls}ম শ্রেণি</span>
+                    <div class="flex items-center">
+                        <span class="font-bold mr-3">${classDistribution[cls]} জন</span>
+                        <div class="w-24 bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full" 
+                                 style="width: ${(classDistribution[cls] / students.length * 100) || 0}%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // এক্সপোর্ট ফাংশন
+        function exportStudentData() {
+            if (students.length === 0) {
+                alert("রপ্তানি করার জন্য কোন ডেটা নেই!");
+                return;
+            }
+            
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "আইডি নম্বর,রোল নং,নাম,শ্রেণি,লিঙ্গ,পিতার নাম,মাতার নাম,মোবাইল,ইমেইল,গ্রাম,উপজেলা,জেলা,ভর্তির তারিখ\n";
+            
+            students.forEach((s, index) => {
+                csvContent += `${index + 1},${s.roll},${s.name},${s.class}ম শ্রেণি,${s.gender},${s.fatherName},${s.motherName},${s.mobile || ''},${s.email || ''},${s.village},${s.upazila},${s.district},${s.admissionDate}\n`;
+            });
+            
+            downloadCSV(csvContent, 'মাদ্রাসা_ছাত্র_তথ্য_১৮৭৫২');
+        }
+
+        function exportTeacherData() {
+            if (teachers.length === 0) {
+                alert("রপ্তানি করার জন্য কোন ডেটা নেই!");
+                return;
+            }
+            
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "আইডি নম্বর,ইনডেক্স নম্বর,নাম,পদবী,বিষয়/দায়িত্ব,মোবাইল,ইমেইল,বেতন,যোগদান তারিখ,এনআইডি,ঠিকানা,স্থায়ী ঠিকানা,প্রকার\n";
+            
+            teachers.forEach((t, index) => {
+                csvContent += `${index + 1},${t.teacherId},${t.name},${t.designation},${t.subject || ''},${t.mobile},${t.email || ''},${t.salary},${t.joiningDate},${t.nid || ''},${t.address},${t.permanentAddress || ''},${t.type}\n`;
+            });
+            
+            downloadCSV(csvContent, 'মাদ্রাসা_শিক্ষক_তথ্য_১৮৭৫২');
+        }
+
+        function downloadCSV(content, filename) {
+            const encodedUri = encodeURI(content);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `${filename}_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert("ডেটা CSV ফাইল হিসেবে ডাউনলোড হয়েছে!");
+        }
+
+        // ইনিশিয়াল লোড
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBanglaDate();
+            
+            // তারিখ আপডেট
+            setInterval(updateBanglaDate, 60000);
+            
+            // ডিফল্ট ভ্যালু সেট
+            document.getElementById('financeDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('studentAdmissionDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('teacherJoiningDate').value = new Date().toISOString().split('T')[0];
+            
+            // ডিফল্ট লগইন ক্রেডেনশিয়াল সেট
+            document.getElementById('loginEmail').value = 'admin@madrasa.com';
+            document.getElementById('loginPassword').value = 'password123';
+            
+            // মাদ্রাসা কোড সেট করুন
+            console.log('মাদ্রাসা ম্যানেজমেন্ট সিস্টেম লোড হয়েছে');
+            console.log('মাদ্রাসা কোড: ১৮৭৫২');
+            console.log('EIIN No: ১৩০২৯০');
+            console.log('মোবাইল: ০১৩০৯-১৩০২৯০');
+            
+            // Auto login for testing (remove in production)
+            // setTimeout(() => {
+            //     login();
+            // }, 1000);
+        });
+    </script>
+</body>
+</html>
