@@ -1,12 +1,7 @@
-const CACHE_NAME = 'madrasa-management-v1.0';
+const CACHE_NAME = 'madrasa-management-v2.0';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  'https://cdn.tailwindcss.com',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
-  'https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap',
-  'https://i.ibb.co.com/hhVX9hp/android-chrome-192x192.png',
-  'https://i.ibb.co.com/gb91ZXh7/android-chrome-512x512.png'
+  './',
+  './index.html'
 ];
 
 self.addEventListener('install', event => {
@@ -27,5 +22,19 @@ self.addEventListener('fetch', event => {
         }
         return fetch(event.request);
       })
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
   );
 });
