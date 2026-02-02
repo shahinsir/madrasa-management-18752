@@ -1,8 +1,9 @@
 {
-  "name": "মেহেরপুর আনছারুল উলূম আলিম মাদ্রাসা",
+  "name": "মাদ্রাসা ম্যানেজমেন্ট",
   "short_name": "মাদ্রাসা ম্যানেজমেন্ট",
-  "description": "মাদ্রাসা ম্যানেজমেন্ট সিস্টেম - EIIN: ১৩০২৯০",
-  "start_url": "/",
+  "description": "মেহেরপুর আনছারুল উলূম আলিম মাদ্রাসা - EIIN: ১৩০২৯০",
+  "start_url": ".",
+  "scope": ".",
   "display": "standalone",
   "background_color": "#667eea",
   "theme_color": "#667eea",
@@ -22,6 +23,5 @@
     }
   ],
   "categories": ["education", "productivity"],
-  "lang": "bn",
-  "dir": "ltr"
+  "lang": "bn"
 }
