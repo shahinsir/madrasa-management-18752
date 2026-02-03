@@ -972,7 +972,7 @@
                             <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
                                 <tr>
                                     <th class="p-4 text-left font-semibold text-gray-700">ক্রমিক নং</th>
-                                    <th class="p-4 text-left font-semibold text-gray-700">আইডি নং</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">ইনডেক্স নং</th>
                                     <th class="p-4 text-left font-semibold text-gray-700">নাম</th>
                                     <th class="p-4 text-left font-semibold text-gray-700">পদবী</th>
                                     <th class="p-4 text-left font-semibold text-gray-700">বিষয়</th>
@@ -3034,7 +3034,7 @@
             }
             
             let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-            csvContent += "ক্রমিক,তারিখ,শিক্ষক/কর্মচারীর নাম,পদবী,আইডি নং,হাজিরার অবস্থা,প্রবেশের সময়,প্রস্থানের সময়,ছুটির ধরন,মন্তব্য,রেকর্ড করার তারিখ\n";
+            csvContent += "ক্রমিক,তারিখ,শিক্ষক/কর্মচারীর নাম,পদবী,ইনডেক্স নং,হাজিরার অবস্থা,প্রবেশের সময়,প্রস্থানের সময়,ছুটির ধরন,মন্তব্য,রেকর্ড করার তারিখ\n";
             
             attendanceRecords.forEach((record, index) => {
                 const teacher = teachers.find(t => t.id === record.teacherId) || {};
