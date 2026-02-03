@@ -249,31 +249,55 @@
             border-top: 1px solid #e2e8f0;
         }
         
-        .role-badge {
-            display: inline-block;
-            padding: 8px 18px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            margin: 5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .badge-admin {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .badge-user {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-        }
-        
-        .login-options {
+        .role-selector {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .role-option {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            flex: 1;
+            text-align: center;
+            max-width: 200px;
+        }
+        
+        .role-admin {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            color: #4f46e5;
+            border-color: #4f46e5;
+        }
+        
+        .role-user {
+            background: linear-gradient(135deg, #10b98120 0%, #05966920 100%);
+            color: #059669;
+            border-color: #059669;
+        }
+        
+        .role-option.active {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .role-admin.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .role-user.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .role-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
         }
         
         .credential-hint {
@@ -512,6 +536,95 @@
             50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
+        
+        /* উন্নত লগআউট কনফার্মেশন */
+        .logout-modal {
+            max-width: 500px;
+        }
+        
+        .logout-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            box-shadow: 0 15px 30px rgba(239, 68, 68, 0.3);
+        }
+        
+        .logout-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+        
+        .logout-btn {
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            min-width: 140px;
+        }
+        
+        .logout-confirm {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        
+        .logout-confirm:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(239, 68, 68, 0.3);
+        }
+        
+        .logout-cancel {
+            background: #f1f5f9;
+            color: #64748b;
+            border-color: #e2e8f0;
+        }
+        
+        .logout-cancel:hover {
+            background: #e2e8f0;
+        }
+        
+        /* পাসওয়ার্ড হাইড স্টাইল */
+        .password-hint {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 16px;
+        }
+        
+        .show-password {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 1002;
+            cursor: pointer;
+            display: none;
+        }
+        
+        .show-password:hover {
+            background: rgba(0,0,0,0.9);
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -525,9 +638,21 @@
                 </div>
                 <h1 class="login-title">মাদ্রাসা ম্যানেজমেন্ট</h1>
                 <p class="login-subtitle">মেহেরপুর আনছারুল উলূম আলিম মাদ্রাসা</p>
-                <div class="flex justify-center mt-6">
-                    <span class="role-badge badge-admin">এডমিন অ্যাক্সেস</span>
-                    <span class="role-badge badge-user">ইউজার অ্যাক্সেস</span>
+                
+                <!-- রোল সিলেক্টর -->
+                <div class="role-selector">
+                    <div id="adminRole" class="role-option role-admin active" onclick="selectRole('admin')">
+                        <div class="role-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div>এডমিন</div>
+                    </div>
+                    <div id="userRole" class="role-option role-user" onclick="selectRole('user')">
+                        <div class="role-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>ইউজার</div>
+                    </div>
                 </div>
             </div>
             
@@ -566,7 +691,7 @@
                 </button>
             </form>
             
-            <!-- লগইন গোপন তথ্য (এডমিনের জন্য) -->
+            <!-- লগইন গোপন তথ্য -->
             <div class="credential-hint mt-8">
                 <div class="credential-title">
                     <i class="fas fa-shield-alt"></i>
@@ -574,12 +699,20 @@
                 </div>
                 <div class="mt-3">
                     <div class="credential-item">
-                        <span class="credential-role">সিস্টেম সতর্কতা:</span>
-                        <span class="credential-details">অনুমোদিত ব্যবহারকারীগণ সঠিক লগইন তথ্য ব্যবহার করুন</span>
+                        <span class="credential-role" id="currentRoleTitle">এডমিন লগইন:</span>
+                        <span class="credential-details" id="currentRoleCreds">
+                            ইমেইল: admin@madrasa.com
+                        </span>
+                    </div>
+                    <div class="credential-item">
+                        <span class="credential-role" id="currentRoleTitle2">ইউজার লগইন:</span>
+                        <span class="credential-details" id="currentRoleCreds2">
+                            ইমেইল: user@madrasa.com
+                        </span>
                     </div>
                     <div class="credential-item">
                         <span class="credential-role">সাহায্যের জন্য:</span>
-                        <span class="credential-details">মোবাইল: ০১৩০৯-১৩০২৯০</span>
+                        <span class="credential-details">মোবাইল: ০১৭১১-১৮৬০৮১</span>
                     </div>
                 </div>
             </div>
@@ -594,6 +727,11 @@
             </div>
         </div>
     </div>
+
+    <!-- পাসওয়ার্ড দেখার বাটন (শুধু ডেভেলপারদের জন্য) -->
+    <button id="showPasswordBtn" class="show-password" onclick="togglePasswordHint()">
+        <i class="fas fa-key mr-1"></i>পাসওয়ার্ড দেখুন
+    </button>
 
     <!-- মূল অ্যাপ কন্টেন্ট (লগইনের পর শো হবে) -->
     <div id="appContent" class="hidden min-h-screen p-4 md:p-8">
@@ -631,7 +769,7 @@
                         <div class="text-right">
                             <p class="text-gray-600" id="currentDateBangla"></p>
                             <p class="text-sm text-gray-500" id="currentTime"></p>
-                            <button onclick="logout()" class="text-sm text-red-600 hover:text-red-800 mt-1 font-medium">
+                            <button onclick="showLogoutConfirm()" class="text-sm text-red-600 hover:text-red-800 mt-1 font-medium flex items-center">
                                 <i class="fas fa-sign-out-alt mr-1"></i>লগআউট
                             </button>
                         </div>
@@ -653,6 +791,9 @@
                     </button>
                     <button onclick="showSection('teachers')" id="tab-teachers" class="nav-tab px-6 py-3 rounded-xl bg-purple-50 text-purple-700 font-semibold">
                         <i class="fas fa-chalkboard-teacher mr-2"></i>শিক্ষক-কর্মচারী
+                    </button>
+                    <button onclick="showSection('attendance')" id="tab-attendance" class="nav-tab px-6 py-3 rounded-xl bg-orange-50 text-orange-700 font-semibold">
+                        <i class="fas fa-calendar-check mr-2"></i>হাজিরা ব্যবস্থাপনা
                     </button>
                     <button onclick="showSection('finance')" id="tab-finance" class="nav-tab px-6 py-3 rounded-xl bg-red-50 text-red-700 font-semibold">
                         <i class="fas fa-money-bill-wave mr-2"></i>আর্থিক ব্যবস্থাপনা
@@ -857,6 +998,127 @@
                 </div>
             </div>
 
+            <!-- হাজিরা ব্যবস্থাপনা সেকশন -->
+            <div id="section-attendance" class="section-content hidden">
+                <div class="glass-card p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-700 mb-4 md:mb-0">
+                            <i class="fas fa-calendar-check mr-2 text-orange-500"></i>
+                            শিক্ষক ও কর্মচারী হাজিরা ব্যবস্থাপনা
+                        </h3>
+                        <div class="flex space-x-2">
+                            <button onclick="exportAttendanceData()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 shadow-md">
+                                <i class="fas fa-file-export mr-2"></i>এক্সপোর্ট
+                            </button>
+                            <button id="addAttendanceBtn" onclick="showAttendanceModal()" class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition duration-300 shadow-md">
+                                <i class="fas fa-plus-circle mr-2"></i>নতুন হাজিরা যোগ করুন
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- তারিখ নির্বাচন -->
+                    <div class="mb-6">
+                        <div class="flex flex-wrap gap-4 items-center">
+                            <input type="date" id="attendanceFilterDate" class="p-3 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500" onchange="filterAttendance()">
+                            
+                            <select id="attendanceFilterMonth" class="p-3 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500" onchange="filterAttendance()">
+                                <option value="">সকল মাস</option>
+                                <option value="0">জানুয়ারী</option>
+                                <option value="1">ফেব্রুয়ারী</option>
+                                <option value="2">মার্চ</option>
+                                <option value="3">এপ্রিল</option>
+                                <option value="4">মে</option>
+                                <option value="5">জুন</option>
+                                <option value="6">জুলাই</option>
+                                <option value="7">আগস্ট</option>
+                                <option value="8">সেপ্টেম্বর</option>
+                                <option value="9">অক্টোবর</option>
+                                <option value="10">নভেম্বর</option>
+                                <option value="11">ডিসেম্বর</option>
+                            </select>
+                            
+                            <select id="attendanceFilterStatus" class="p-3 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500" onchange="filterAttendance()">
+                                <option value="">সকল অবস্থা</option>
+                                <option value="present">উপস্থিত</option>
+                                <option value="absent">অনুপস্থিত</option>
+                                <option value="late">বিলম্বিত</option>
+                                <option value="leave">ছুটি</option>
+                            </select>
+                            
+                            <div class="relative flex-1 min-w-[250px]">
+                                <input type="text" id="attendanceSearch" placeholder="শিক্ষক/কর্মচারীর নাম অনুসন্ধান..." 
+                                       class="p-3 pl-12 border rounded-lg w-full bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                       onkeyup="filterAttendance()">
+                                <i class="fas fa-search text-gray-400 absolute left-4 top-3.5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- হাজিরা টেবিল -->
+                    <div class="overflow-x-auto rounded-xl border shadow-sm">
+                        <table class="w-full">
+                            <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+                                <tr>
+                                    <th class="p-4 text-left font-semibold text-gray-700">তারিখ</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">শিক্ষক/কর্মচারী</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">পদবী</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">হাজিরার অবস্থা</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">প্রবেশের সময়</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">প্রস্থানের সময়</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">মন্তব্য</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">কার্যক্রম</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTableBody">
+                                <!-- হাজিরা তথ্য লোড হবে -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- খালি অবস্থা -->
+                    <div id="emptyAttendance" class="text-center py-12 hidden">
+                        <i class="fas fa-calendar-times text-5xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl text-gray-500 mb-2">কোন হাজিরা রেকর্ড নেই</h3>
+                        <p class="text-gray-400">নতুন হাজিরা যোগ করুন</p>
+                    </div>
+                    
+                    <!-- হাজিরা সারাংশ -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+                        <div class="bg-gradient-to-r from-green-500 to-green-600 p-4 rounded-xl text-white shadow-md">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-sm">উপস্থিত</h3>
+                                <i class="fas fa-user-check text-xl opacity-80"></i>
+                            </div>
+                            <p class="text-2xl font-bold mt-1"><span id="attendancePresentCount">০</span></p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-red-500 to-red-600 p-4 rounded-xl text-white shadow-md">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-sm">অনুপস্থিত</h3>
+                                <i class="fas fa-user-times text-xl opacity-80"></i>
+                            </div>
+                            <p class="text-2xl font-bold mt-1"><span id="attendanceAbsentCount">০</span></p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 p-4 rounded-xl text-white shadow-md">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-sm">বিলম্বিত</h3>
+                                <i class="fas fa-clock text-xl opacity-80"></i>
+                            </div>
+                            <p class="text-2xl font-bold mt-1"><span id="attendanceLateCount">০</span></p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 rounded-xl text-white shadow-md">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-sm">ছুটি</h3>
+                                <i class="fas fa-umbrella-beach text-xl opacity-80"></i>
+                            </div>
+                            <p class="text-2xl font-bold mt-1"><span id="attendanceLeaveCount">০</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- আর্থিক ব্যবস্থাপনা সেকশন -->
             <div id="section-finance" class="section-content hidden">
                 <div class="glass-card p-6 mb-6">
@@ -933,7 +1195,7 @@
 
             <!-- ফুটার -->
             <div class="glass-card p-6 mt-8 text-center text-gray-600" id="footer">
-                <p class="font-medium">© ২০২৪ মেহেরপুর আনছারুল উলূম আলিম মাদ্রাসা। সকল অধিকার সংরক্ষিত।</p>
+                <p class="font-medium">© ২০২৬ মেহেরপুর আনছারুল উলূম আলিম মাদ্রাসা। সকল অধিকার সংরক্ষিত।</p>
                 <p class="text-sm mt-2">ডেভেলপড: মাদ্রাসা ম্যানেজমেন্ট সিস্টেম টিম | মাদ্রাসা কোড: ১৮৭৫২ | EIIN No: ১৩০২৯০</p>
                 <p class="text-xs mt-1" id="syncStatus">ডেটা সিঙ্কিং...</p>
             </div>
@@ -944,6 +1206,43 @@
     <div id="notification" class="notification hidden">
         <i class="fas fa-check-circle"></i>
         <span id="notificationText"></span>
+    </div>
+
+    <!-- লগআউট কনফার্মেশন মডেল -->
+    <div id="logoutModal" class="modal-overlay hidden">
+        <div class="modal-content logout-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-sign-out-alt"></i>
+                    লগআউট কনফার্মেশন
+                </h3>
+                <button onclick="hideModal('logoutModal')" class="close-button">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="text-center py-8">
+                <div class="logout-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-3" id="logoutUserName">আপনি কি লগআউট করতে চান?</h3>
+                <p class="text-gray-600 mb-4" id="logoutUserRole">
+                    আপনি বর্তমানে <span class="font-bold text-blue-600">এডমিন</span> হিসেবে লগইন আছেন
+                </p>
+                <p class="text-gray-500 text-sm">
+                    লগআউট করলে আপনি ডাটাবেস এডিট করার সুযোগ হারাবেন। পুনরায় লগইন করতে আপনার ক্রেডেনশিয়াল প্রয়োজন হবে।
+                </p>
+                
+                <div class="logout-buttons">
+                    <button onclick="hideModal('logoutModal')" class="logout-btn logout-cancel">
+                        <i class="fas fa-times mr-2"></i>বাতিল
+                    </button>
+                    <button onclick="performLogout()" class="logout-btn logout-confirm">
+                        <i class="fas fa-sign-out-alt mr-2"></i>লগআউট
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- উন্নত মডেল ফরম - ছাত্র যোগ -->
@@ -1212,6 +1511,107 @@
         </div>
     </div>
 
+    <!-- হাজিরা যোগ করার মডেল -->
+    <div id="addAttendanceModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-calendar-plus"></i>
+                    <span id="attendanceModalTitle">নতুন হাজিরা যোগ করুন</span>
+                </h3>
+                <button onclick="hideModal('addAttendanceModal')" class="close-button">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-calendar-alt"></i>তারিখ ও সময় নির্বাচন
+                </h4>
+                <div class="form-grid">
+                    <div>
+                        <label class="form-label">তারিখ*</label>
+                        <input id="attendanceDate" type="date" class="form-input" value="">
+                    </div>
+                    <div>
+                        <label class="form-label">প্রবেশের সময়*</label>
+                        <input id="attendanceInTime" type="time" class="form-input" value="09:00">
+                    </div>
+                    <div>
+                        <label class="form-label">প্রস্থানের সময়</label>
+                        <input id="attendanceOutTime" type="time" class="form-input" value="17:00">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-user-tie"></i>শিক্ষক/কর্মচারী নির্বাচন
+                </h4>
+                <div class="form-grid">
+                    <div>
+                        <label class="form-label">শিক্ষক/কর্মচারী*</label>
+                        <select id="attendanceTeacher" class="form-input" onchange="updateAttendanceDesignation()">
+                            <option value="">নির্বাচন করুন</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">পদবী</label>
+                        <input id="attendanceDesignation" type="text" class="form-input" readonly>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-clipboard-check"></i>হাজিরার অবস্থা
+                </h4>
+                <div class="form-grid">
+                    <div>
+                        <label class="form-label">হাজিরার অবস্থা*</label>
+                        <select id="attendanceStatus" class="form-input" onchange="toggleLeaveType()">
+                            <option value="present">উপস্থিত</option>
+                            <option value="absent">অনুপস্থিত</option>
+                            <option value="late">বিলম্বিত</option>
+                            <option value="leave">ছুটি</option>
+                        </select>
+                    </div>
+                    <div id="leaveTypeContainer" class="hidden">
+                        <label class="form-label">ছুটির ধরন</label>
+                        <select id="attendanceLeaveType" class="form-input">
+                            <option value="">নির্বাচন করুন</option>
+                            <option value="sick">অসুস্থতা</option>
+                            <option value="casual">অবসর</option>
+                            <option value="emergency">জরুরী</option>
+                            <option value="other">অন্যান্য</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-comment-dots"></i>অতিরিক্ত তথ্য
+                </h4>
+                <div class="form-grid">
+                    <div class="col-span-2">
+                        <label class="form-label">মন্তব্য</label>
+                        <textarea id="attendanceComments" class="form-input" rows="3" placeholder="কোন বিশেষ মন্তব্য থাকলে লিখুন..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 flex justify-end space-x-3">
+                <button onclick="hideModal('addAttendanceModal')" class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-300 font-medium">
+                    <i class="fas fa-times mr-2"></i>বাতিল
+                </button>
+                <button onclick="saveAttendance()" class="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition duration-300 font-medium shadow-md">
+                    <i class="fas fa-save mr-2"></i>সংরক্ষণ করুন
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Firebase Configuration
         const firebaseConfig = {
@@ -1234,9 +1634,13 @@
         let students = [];
         let teachers = [];
         let transactions = [];
+        let attendanceRecords = [];
         let currentUser = null;
         let currentStudentEditId = null;
         let currentTeacherEditId = null;
+        let currentAttendanceEditId = null;
+        let selectedRole = 'admin'; // ডিফল্ট এডমিন সিলেক্টেড
+        let passwordHintVisible = false; // পাসওয়ার্ড হিন্ট দৃশ্যমান কিনা
 
         // বাংলা সংখ্যা কনভার্টার
         const banglaNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
@@ -1290,6 +1694,77 @@
             }, 3000);
         }
 
+        // রোল সিলেক্ট
+        function selectRole(role) {
+            selectedRole = role;
+            
+            // UI আপডেট
+            const adminOption = document.getElementById('adminRole');
+            const userOption = document.getElementById('userRole');
+            
+            if (role === 'admin') {
+                adminOption.classList.add('active');
+                userOption.classList.remove('active');
+                document.getElementById('currentRoleTitle').textContent = 'এডমিন লগইন:';
+                
+                // শুধু ইমেইল দেখাবে, পাসওয়ার্ড দেখাবে না
+                document.getElementById('currentRoleCreds').innerHTML = 'ইমেইল: admin@madrasa.com';
+                
+                // ইমেইল অটো ফিল
+                document.getElementById('loginEmail').value = 'admin@madrasa.com';
+                // পাসওয়ার্ড খালি রাখবে
+                document.getElementById('loginPassword').value = '';
+                
+                // পাসওয়ার্ড প্লেসহোল্ডার
+                document.getElementById('loginPassword').placeholder = 'এডমিন পাসওয়ার্ড লিখুন';
+            } else {
+                userOption.classList.add('active');
+                adminOption.classList.remove('active');
+                document.getElementById('currentRoleTitle').textContent = 'ইউজার লগইন:';
+                
+                // শুধু ইমেইল দেখাবে, পাসওয়ার্ড দেখাবে না
+                document.getElementById('currentRoleCreds').innerHTML = 'ইমেইল: user@madrasa.com';
+                
+                // ইমেইল অটো ফিল
+                document.getElementById('loginEmail').value = 'user@madrasa.com';
+                // পাসওয়ার্ড খালি রাখবে
+                document.getElementById('loginPassword').value = '';
+                
+                // পাসওয়ার্ড প্লেসহোল্ডার
+                document.getElementById('loginPassword').placeholder = 'ইউজার পাসওয়ার্ড লিখুন';
+            }
+        }
+
+        // পাসওয়ার্ড হিন্ট টগল
+        function togglePasswordHint() {
+            passwordHintVisible = !passwordHintVisible;
+            const showPasswordBtn = document.getElementById('showPasswordBtn');
+            
+            if (passwordHintVisible) {
+                showPasswordBtn.innerHTML = '<i class="fas fa-eye-slash mr-1"></i>পাসওয়ার্ড লুকান';
+                
+                // পাসওয়ার্ড হিন্ট দেখাও
+                if (selectedRole === 'admin') {
+                    document.getElementById('currentRoleCreds').innerHTML = 
+                        'ইমেইল: admin@madrasa.com | পাসওয়ার্ড: password123';
+                } else {
+                    document.getElementById('currentRoleCreds').innerHTML = 
+                        'ইমেইল: user@madrasa.com | পাসওয়ার্ড: viewer123';
+                }
+            } else {
+                showPasswordBtn.innerHTML = '<i class="fas fa-key mr-1"></i>পাসওয়ার্ড দেখুন';
+                
+                // পাসওয়ার্ড হিন্ট লুকাও
+                if (selectedRole === 'admin') {
+                    document.getElementById('currentRoleCreds').innerHTML = 
+                        'ইমেইল: admin@madrasa.com';
+                } else {
+                    document.getElementById('currentRoleCreds').innerHTML = 
+                        'ইমেইল: user@madrasa.com';
+                }
+            }
+        }
+
         // ইউজার রোল অনুযায়ী UI কন্ট্রোল
         function updateUIForUserRole() {
             const isAdmin = currentUser && currentUser.role === 'admin';
@@ -1310,15 +1785,18 @@
             // এডিট বাটন কন্ট্রোল
             const addStudentBtn = document.getElementById('addStudentBtn');
             const addTeacherBtn = document.getElementById('addTeacherBtn');
+            const addAttendanceBtn = document.getElementById('addAttendanceBtn');
             const financeForm = document.getElementById('financeForm');
             
             if (isAdmin) {
                 addStudentBtn.classList.remove('hidden');
                 addTeacherBtn.classList.remove('hidden');
+                addAttendanceBtn.classList.remove('hidden');
                 financeForm.classList.remove('hidden');
             } else {
                 addStudentBtn.classList.add('hidden');
                 addTeacherBtn.classList.add('hidden');
+                addAttendanceBtn.classList.add('hidden');
                 financeForm.classList.add('hidden');
             }
         }
@@ -1356,6 +1834,17 @@
                 loadFinancialData();
                 updateDashboard();
                 updateSyncStatus('ডেটা সিঙ্ক হয়েছে');
+            });
+
+            // হাজিরা ডেটা
+            database.ref('madrasa_18752/attendance').on('value', (snapshot) => {
+                attendanceRecords = [];
+                snapshot.forEach((childSnapshot) => {
+                    attendanceRecords.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                loadAttendanceTable();
+                updateAttendanceSummary();
+                updateSyncStatus('হাজিরা ডেটা সিঙ্ক হয়েছে');
             });
         }
 
@@ -1415,12 +1904,18 @@
                 });
         }
 
-        // লগইন সিস্টেম (ইম্প্রুভড)
+        // লগইন সিস্টেম
         function login() {
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value.trim();
             const loginBtn = document.getElementById('loginBtn');
             const originalText = loginBtn.innerHTML;
+            
+            // ভ্যালিডেশন চেক
+            if (!email || !password) {
+                showNotification('দয়া করে ইমেইল ও পাসওয়ার্ড দিন!', 'error');
+                return;
+            }
             
             // লোডিং স্টেট
             loginBtn.innerHTML = '<div class="loading"></div> লগইন হচ্ছে...';
@@ -1430,25 +1925,34 @@
             const defaultAdmin = {
                 email: 'admin@madrasa.com',
                 password: 'password123',
-                role: 'admin'
+                role: 'admin',
+                name: 'সিস্টেম এডমিন'
             };
             
             const defaultViewer = {
                 email: 'user@madrasa.com',
                 password: 'viewer123',
-                role: 'viewer'
+                role: 'viewer',
+                name: 'সিস্টেম ইউজার'
             };
             
             // 1 সেকেন্ড ডিলে (ইউএক্সের জন্য)
             setTimeout(() => {
-                if (email === defaultAdmin.email && password === defaultAdmin.password) {
-                    currentUser = defaultAdmin;
-                    handleSuccessfulLogin();
-                } else if (email === defaultViewer.email && password === defaultViewer.password) {
-                    currentUser = defaultViewer;
-                    handleSuccessfulLogin();
-                } else {
-                    showNotification('ভুল ইমেইল বা পাসওয়ার্ড!', 'error');
+                // নির্বাচিত রোল অনুযায়ী চেক
+                if (selectedRole === 'admin') {
+                    if (email === defaultAdmin.email && password === defaultAdmin.password) {
+                        currentUser = defaultAdmin;
+                        handleSuccessfulLogin();
+                    } else {
+                        showNotification('ভুল এডমিন ইমেইল বা পাসওয়ার্ড!', 'error');
+                    }
+                } else if (selectedRole === 'user') {
+                    if (email === defaultViewer.email && password === defaultViewer.password) {
+                        currentUser = defaultViewer;
+                        handleSuccessfulLogin();
+                    } else {
+                        showNotification('ভুল ইউজার ইমেইল বা পাসওয়ার্ড!', 'error');
+                    }
                 }
                 
                 // বাটন রিসেট
@@ -1465,6 +1969,9 @@
                     loginModal.style.display = 'none';
                     loginModal.classList.add('hidden');
                 }
+                
+                // পাসওয়ার্ড হিন্ট বাটন লুকাও
+                document.getElementById('showPasswordBtn').style.display = 'none';
                 
                 // অ্যাপ কন্টেন্ট দেখাও
                 const appContent = document.getElementById('appContent');
@@ -1489,8 +1996,10 @@
                 const rememberMe = document.getElementById('rememberMe');
                 if (rememberMe && rememberMe.checked) {
                     localStorage.setItem('rememberedEmail', currentUser.email);
+                    localStorage.setItem('rememberedRole', currentUser.role);
                 } else {
                     localStorage.removeItem('rememberedEmail');
+                    localStorage.removeItem('rememberedRole');
                 }
                 
             } catch (error) {
@@ -1499,25 +2008,55 @@
             }
         }
 
-        function logout() {
-            if (confirm('আপনি কি লগআউট করতে চান?')) {
-                currentUser = null;
-                
-                // অ্যাপ কন্টেন্ট লুকাও
-                document.getElementById('appContent').classList.add('hidden');
-                
-                // লগইন মডেল দেখাও
-                const loginModal = document.getElementById('loginModal');
-                if (loginModal) {
-                    loginModal.style.display = 'flex';
-                    loginModal.classList.remove('hidden');
-                }
-                
-                // ফর্ম রিসেট (শুধু পাসওয়ার্ড)
-                document.getElementById('loginPassword').value = '';
-                
-                showNotification('সফলভাবে লগআউট হয়েছে!', 'success');
+        // লগআউট কনফার্মেশন দেখাও
+        function showLogoutConfirm() {
+            if (!currentUser) return;
+            
+            const logoutUserName = document.getElementById('logoutUserName');
+            const logoutUserRole = document.getElementById('logoutUserRole');
+            
+            if (currentUser.role === 'admin') {
+                logoutUserName.textContent = `${currentUser.name}, আপনি কি লগআউট করতে চান?`;
+                logoutUserRole.innerHTML = 'আপনি বর্তমানে <span class="font-bold text-blue-600">এডমিন</span> হিসেবে লগইন আছেন';
+            } else {
+                logoutUserName.textContent = `${currentUser.name}, আপনি কি লগআউট করতে চান?`;
+                logoutUserRole.innerHTML = 'আপনি বর্তমানে <span class="font-bold text-green-600">ইউজার</span> হিসেবে লগইন আছেন';
             }
+            
+            document.getElementById('logoutModal').classList.remove('hidden');
+        }
+
+        // লগআউট এক্সিকিউট
+        function performLogout() {
+            hideModal('logoutModal');
+            
+            // অ্যাপ কন্টেন্ট লুকাও
+            document.getElementById('appContent').classList.add('hidden');
+            
+            // লগইন মডেল দেখাও
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal) {
+                loginModal.style.display = 'flex';
+                loginModal.classList.remove('hidden');
+            }
+            
+            // পাসওয়ার্ড হিন্ট বাটন দেখাও
+            document.getElementById('showPasswordBtn').style.display = 'block';
+            
+            // ফর্ম রিসেট (শুধু পাসওয়ার্ড)
+            document.getElementById('loginPassword').value = '';
+            
+            // রোল সিলেক্টর রিসেট
+            selectRole('admin');
+            
+            // রিমেমবার মি চেকবক্স আনচেক
+            document.getElementById('rememberMe').checked = false;
+            
+            // ইউজার রিসেট
+            const previousUser = currentUser;
+            currentUser = null;
+            
+            showNotification(`${previousUser.name} হিসেবে সফলভাবে লগআউট হয়েছে!`, 'success');
         }
 
         // ট্যাব নেভিগেশন
@@ -1533,10 +2072,16 @@
             });
             
             // নির্বাচিত সেকশন দেখাও
-            document.getElementById(`section-${sectionId}`).classList.remove('hidden');
+            const section = document.getElementById(`section-${sectionId}`);
+            if (section) {
+                section.classList.remove('hidden');
+            }
             
             // নির্বাচিত ট্যাব অ্যাক্টিভ করো
-            document.getElementById(`tab-${sectionId}`).classList.add('active');
+            const tab = document.getElementById(`tab-${sectionId}`);
+            if (tab) {
+                tab.classList.add('active');
+            }
         }
 
         // পাসওয়ার্ড টগল
@@ -1557,7 +2102,10 @@
 
         // ফরগট পাসওয়ার্ড
         function showForgotPassword() {
-            showNotification('অ্যাডমিনের সাথে যোগাযোগ করুন: ০১৩০৯-১৩০২৯০', 'info');
+            const message = selectedRole === 'admin' 
+                ? 'এডমিন পাসওয়ার্ড ভুলে গেছেন? অ্যাডমিনের সাথে যোগাযোগ করুন: ০১৭১১-১৮৬০৮১'
+                : 'ইউজার পাসওয়ার্ড ভুলে গেছেন? অ্যাডমিনের সাথে যোগাযোগ করুন: ০১৭১১-১৮৬০৮১';
+            showNotification(message, 'info');
         }
 
         // মডেল কন্ট্রোল
@@ -1669,6 +2217,73 @@
             document.getElementById('teacherAddress').value = '';
             document.getElementById('teacherPermanentAddress').value = '';
             document.getElementById('teacherType').value = '';
+        }
+
+        // হাজিরা মডেল দেখাও
+        function showAttendanceModal() {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
+                return;
+            }
+            
+            document.getElementById('addAttendanceModal').classList.remove('hidden');
+            currentAttendanceEditId = null;
+            resetAttendanceForm();
+            loadTeacherOptions();
+            document.getElementById('attendanceModalTitle').textContent = 'নতুন হাজিরা যোগ করুন';
+            
+            // আজকের তারিখ সেট করুন
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('attendanceDate').value = today;
+        }
+
+        // শিক্ষক অপশন লোড
+        function loadTeacherOptions() {
+            const select = document.getElementById('attendanceTeacher');
+            select.innerHTML = '<option value="">নির্বাচন করুন</option>';
+            
+            teachers.forEach(teacher => {
+                const option = document.createElement('option');
+                option.value = teacher.id;
+                option.textContent = `${teacher.name} - ${teacher.designation}`;
+                option.setAttribute('data-designation', teacher.designation);
+                select.appendChild(option);
+            });
+        }
+
+        // পদবী আপডেট
+        function updateAttendanceDesignation() {
+            const select = document.getElementById('attendanceTeacher');
+            const selectedOption = select.options[select.selectedIndex];
+            const designation = selectedOption.getAttribute('data-designation') || '';
+            document.getElementById('attendanceDesignation').value = designation;
+        }
+
+        // ছুটির ধরন টগল
+        function toggleLeaveType() {
+            const status = document.getElementById('attendanceStatus').value;
+            const leaveTypeContainer = document.getElementById('leaveTypeContainer');
+            
+            if (status === 'leave') {
+                leaveTypeContainer.classList.remove('hidden');
+            } else {
+                leaveTypeContainer.classList.add('hidden');
+                document.getElementById('attendanceLeaveType').value = '';
+            }
+        }
+
+        // হাজিরা ফর্ম রিসেট
+        function resetAttendanceForm() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('attendanceDate').value = today;
+            document.getElementById('attendanceInTime').value = '09:00';
+            document.getElementById('attendanceOutTime').value = '17:00';
+            document.getElementById('attendanceTeacher').value = '';
+            document.getElementById('attendanceDesignation').value = '';
+            document.getElementById('attendanceStatus').value = 'present';
+            document.getElementById('attendanceLeaveType').value = '';
+            document.getElementById('attendanceComments').value = '';
+            document.getElementById('leaveTypeContainer').classList.add('hidden');
         }
 
         function hideModal(modalId) {
@@ -2130,6 +2745,255 @@
             `).join('');
         }
 
+        // হাজিরা টেবিল লোড
+        function loadAttendanceTable() {
+            const tbody = document.getElementById('attendanceTableBody');
+            const emptyState = document.getElementById('emptyAttendance');
+            
+            if (attendanceRecords.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            
+            const filteredAttendance = filterAttendanceList();
+            
+            tbody.innerHTML = filteredAttendance.map((record, index) => {
+                const teacher = teachers.find(t => t.id === record.teacherId) || {};
+                const statusBadge = getStatusBadge(record.status);
+                const date = new Date(record.date);
+                const banglaDate = `${toBanglaNumber(date.getDate())} ${banglaMonths[date.getMonth()]} ${toBanglaNumber(date.getFullYear())}`;
+                
+                return `
+                    <tr class="border-b hover:bg-gray-50 transition duration-200">
+                        <td class="p-4 font-medium text-gray-800">${banglaDate}</td>
+                        <td class="p-4">
+                            <div class="font-semibold text-gray-800">${teacher.name || 'N/A'}</div>
+                            <div class="text-sm text-gray-500">${teacher.teacherId || 'N/A'}</div>
+                        </td>
+                        <td class="p-4 text-gray-700">${teacher.designation || 'N/A'}</td>
+                        <td class="p-4">
+                            ${statusBadge}
+                        </td>
+                        <td class="p-4 text-gray-700">${record.inTime || 'N/A'}</td>
+                        <td class="p-4 text-gray-700">${record.outTime || 'N/A'}</td>
+                        <td class="p-4 text-gray-700 text-sm">${record.comments || 'N/A'}</td>
+                        <td class="p-4">
+                            ${currentUser && currentUser.role === 'admin' ? `
+                                <button onclick="editAttendance('${record.id}')" class="text-blue-600 hover:text-blue-800 mr-3 p-2 rounded-lg hover:bg-blue-50 transition duration-200">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteAttendance('${record.id}')" class="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-50 transition duration-200">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            ` : `
+                                <span class="text-gray-400 text-sm">${toBanglaNumber(index + 1)}</span>
+                            `}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function getStatusBadge(status) {
+            const statusMap = {
+                'present': { text: 'উপস্থিত', class: 'bg-green-100 text-green-800' },
+                'absent': { text: 'অনুপস্থিত', class: 'bg-red-100 text-red-800' },
+                'late': { text: 'বিলম্বিত', class: 'bg-yellow-100 text-yellow-800' },
+                'leave': { text: 'ছুটি', class: 'bg-blue-100 text-blue-800' }
+            };
+            
+            const statusInfo = statusMap[status] || { text: 'অজানা', class: 'bg-gray-100 text-gray-800' };
+            
+            return `<span class="px-3 py-1.5 rounded-full text-sm font-medium ${statusInfo.class}">${statusInfo.text}</span>`;
+        }
+
+        // হাজিরা ফিল্টার
+        function filterAttendance() {
+            loadAttendanceTable();
+            updateAttendanceSummary();
+        }
+
+        function filterAttendanceList() {
+            const filterDate = document.getElementById('attendanceFilterDate').value;
+            const filterMonth = document.getElementById('attendanceFilterMonth').value;
+            const filterStatus = document.getElementById('attendanceFilterStatus').value;
+            const searchTerm = document.getElementById('attendanceSearch').value.toLowerCase();
+            
+            let filtered = attendanceRecords;
+            
+            // তারিখ দ্বারা ফিল্টার
+            if (filterDate) {
+                filtered = filtered.filter(record => record.date === filterDate);
+            }
+            
+            // মাস দ্বারা ফিল্টার
+            if (filterMonth !== '') {
+                filtered = filtered.filter(record => {
+                    const date = new Date(record.date);
+                    return date.getMonth().toString() === filterMonth;
+                });
+            }
+            
+            // অবস্থা দ্বারা ফিল্টার
+            if (filterStatus) {
+                filtered = filtered.filter(record => record.status === filterStatus);
+            }
+            
+            // সার্চ টার্ম দ্বারা ফিল্টার
+            if (searchTerm) {
+                filtered = filtered.filter(record => {
+                    const teacher = teachers.find(t => t.id === record.teacherId);
+                    if (!teacher) return false;
+                    
+                    return teacher.name.toLowerCase().includes(searchTerm) ||
+                           teacher.designation.toLowerCase().includes(searchTerm) ||
+                           teacher.teacherId.toLowerCase().includes(searchTerm);
+                });
+            }
+            
+            // তারিখ অনুসারে সাজানো (নতুন থেকে পুরাতন)
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            return filtered;
+        }
+
+        // হাজিরা সারাংশ আপডেট
+        function updateAttendanceSummary() {
+            const filtered = filterAttendanceList();
+            
+            let present = 0, absent = 0, late = 0, leave = 0;
+            
+            filtered.forEach(record => {
+                switch(record.status) {
+                    case 'present': present++; break;
+                    case 'absent': absent++; break;
+                    case 'late': late++; break;
+                    case 'leave': leave++; break;
+                }
+            });
+            
+            document.getElementById('attendancePresentCount').textContent = toBanglaNumber(present);
+            document.getElementById('attendanceAbsentCount').textContent = toBanglaNumber(absent);
+            document.getElementById('attendanceLateCount').textContent = toBanglaNumber(late);
+            document.getElementById('attendanceLeaveCount').textContent = toBanglaNumber(leave);
+        }
+
+        // হাজিরা সংরক্ষণ
+        function saveAttendance() {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
+                return;
+            }
+            
+            const date = document.getElementById('attendanceDate').value;
+            const teacherId = document.getElementById('attendanceTeacher').value;
+            const status = document.getElementById('attendanceStatus').value;
+            const inTime = document.getElementById('attendanceInTime').value;
+            const outTime = document.getElementById('attendanceOutTime').value;
+            const leaveType = document.getElementById('attendanceLeaveType').value;
+            const comments = document.getElementById('attendanceComments').value.trim();
+            
+            // ভ্যালিডেশন
+            if (!date || !teacherId || !status || !inTime) {
+                showNotification('দয়া করে সকল প্রয়োজনীয় তথ্য প্রদান করুন (* চিহ্নিত ফিল্ড)', 'error');
+                return;
+            }
+            
+            // ছুটির ক্ষেত্রে ছুটির ধরন চেক
+            if (status === 'leave' && !leaveType) {
+                showNotification('দয়া করে ছুটির ধরন নির্বাচন করুন', 'error');
+                return;
+            }
+            
+            // একই শিক্ষকের একই তারিখে হাজিরা চেক
+            if (currentAttendanceEditId === null) {
+                const existingRecord = attendanceRecords.find(record => 
+                    record.teacherId === teacherId && record.date === date
+                );
+                
+                if (existingRecord) {
+                    showNotification('এই শিক্ষকের আজকের জন্য ইতিমধ্যে হাজিরা রেকর্ড করা হয়েছে!', 'error');
+                    return;
+                }
+            }
+            
+            const attendanceData = {
+                date,
+                teacherId,
+                status,
+                inTime,
+                outTime: outTime || '',
+                leaveType: status === 'leave' ? leaveType : '',
+                comments,
+                recordedBy: currentUser.email,
+                timestamp: new Date().toISOString()
+            };
+            
+            saveToFirebase('attendance', attendanceData, currentAttendanceEditId)
+                .then(success => {
+                    if (success) {
+                        hideModal('addAttendanceModal');
+                        showNotification(currentAttendanceEditId ? 'হাজিরা আপডেট করা হয়েছে!' : 'নতুন হাজিরা যোগ করা হয়েছে!', 'success');
+                    }
+                });
+        }
+
+        // হাজিরা এডিট
+        function editAttendance(attendanceId) {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
+                return;
+            }
+            
+            const record = attendanceRecords.find(a => a.id === attendanceId);
+            if (record) {
+                currentAttendanceEditId = attendanceId;
+                
+                document.getElementById('attendanceDate').value = record.date;
+                document.getElementById('attendanceInTime').value = record.inTime || '09:00';
+                document.getElementById('attendanceOutTime').value = record.outTime || '17:00';
+                document.getElementById('attendanceStatus').value = record.status;
+                document.getElementById('attendanceComments').value = record.comments || '';
+                
+                // শিক্ষক নির্বাচন
+                loadTeacherOptions();
+                const teacherSelect = document.getElementById('attendanceTeacher');
+                teacherSelect.value = record.teacherId;
+                updateAttendanceDesignation();
+                
+                // ছুটির ধরন সেট
+                if (record.status === 'leave') {
+                    document.getElementById('attendanceLeaveType').value = record.leaveType || '';
+                    document.getElementById('leaveTypeContainer').classList.remove('hidden');
+                } else {
+                    document.getElementById('leaveTypeContainer').classList.add('hidden');
+                }
+                
+                document.getElementById('attendanceModalTitle').textContent = 'হাজিরা এডিট করুন';
+                document.getElementById('addAttendanceModal').classList.remove('hidden');
+            }
+        }
+
+        // হাজিরা ডিলিট
+        function deleteAttendance(attendanceId) {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
+                return;
+            }
+            
+            if (confirm('আপনি কি এই হাজিরা রেকর্ড মুছতে চান?')) {
+                deleteFromFirebase('attendance', attendanceId)
+                    .then(success => {
+                        if (success) {
+                            showNotification('হাজিরা রেকর্ড মুছে ফেলা হয়েছে!', 'success');
+                        }
+                    });
+            }
+        }
+
         // এক্সপোর্ট ফাংশন
         function exportStudentData() {
             if (students.length === 0) {
@@ -2161,6 +3025,38 @@
             });
             
             downloadCSV(csvContent, 'মাদ্রাসা_শিক্ষক_তথ্য_১৮৭৫২');
+        }
+
+        function exportAttendanceData() {
+            if (attendanceRecords.length === 0) {
+                showNotification("রপ্তানি করার জন্য কোন হাজিরা ডেটা নেই!", "error");
+                return;
+            }
+            
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "ক্রমিক,তারিখ,শিক্ষক/কর্মচারীর নাম,পদবী,আইডি নং,হাজিরার অবস্থা,প্রবেশের সময়,প্রস্থানের সময়,ছুটির ধরন,মন্তব্য,রেকর্ড করার তারিখ\n";
+            
+            attendanceRecords.forEach((record, index) => {
+                const teacher = teachers.find(t => t.id === record.teacherId) || {};
+                const date = new Date(record.date);
+                const banglaDate = `${toBanglaNumber(date.getDate())} ${banglaMonths[date.getMonth()]} ${toBanglaNumber(date.getFullYear())}`;
+                const statusText = getStatusText(record.status);
+                
+                csvContent += `${index + 1},"${banglaDate}","${teacher.name || ''}","${teacher.designation || ''}","${teacher.teacherId || ''}","${statusText}","${record.inTime || ''}","${record.outTime || ''}","${record.leaveType || ''}","${record.comments || ''}","${new Date(record.timestamp).toLocaleDateString('bn-BD')}"\n`;
+            });
+            
+            downloadCSV(csvContent, 'মাদ্রাসা_হাজিরা_তথ্য_১৮৭৫২');
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'present': 'উপস্থিত',
+                'absent': 'অনুপস্থিত',
+                'late': 'বিলম্বিত',
+                'leave': 'ছুটি'
+            };
+            
+            return statusMap[status] || status;
         }
 
         function downloadCSV(content, filename) {
@@ -2228,9 +3124,17 @@
             
             // রিমেমবার মি ফাংশনালিটি
             const rememberedEmail = localStorage.getItem('rememberedEmail');
-            if (rememberedEmail) {
+            const rememberedRole = localStorage.getItem('rememberedRole');
+            
+            if (rememberedEmail && rememberedRole) {
                 document.getElementById('loginEmail').value = rememberedEmail;
                 document.getElementById('rememberMe').checked = true;
+                selectRole(rememberedRole);
+                
+                // পাসওয়ার্ড খালি রাখবে
+                document.getElementById('loginPassword').value = '';
+            } else {
+                selectRole('admin');
             }
             
             // লগইন বাটনে ইভেন্ট লিসেনার যোগ
