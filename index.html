@@ -594,36 +594,261 @@
             background: #e2e8f0;
         }
         
-        /* পাসওয়ার্ড হাইড স্টাইল */
-        .password-hint {
+        /* উন্নত ডিলিট UI স্টাইলস */
+        .delete-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .delete-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+        }
+        
+        .delete-btn:active {
+            transform: translateY(0) scale(0.95);
+        }
+        
+        .delete-btn i {
+            transition: transform 0.3s ease;
+        }
+        
+        .delete-btn:hover i {
+            transform: scale(1.2);
+        }
+        
+        .delete-btn::after {
+            content: '';
             position: absolute;
-            right: 50px;
             top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #718096;
-            cursor: pointer;
-            padding: 5px;
-            font-size: 16px;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(239, 68, 68, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
         }
         
-        .show-password {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.7);
+        .delete-btn:active::after {
+            width: 40px;
+            height: 40px;
+        }
+        
+        /* উন্নত ডিলিট কনফার্মেশন মডেল */
+        .delete-confirm-modal {
+            max-width: 450px;
+        }
+        
+        .delete-confirm-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .delete-confirm-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
             color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            z-index: 1002;
-            cursor: pointer;
-            display: none;
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+            animation: pulse-red 1.5s infinite;
         }
         
-        .show-password:hover {
-            background: rgba(0,0,0,0.9);
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        
+        .delete-confirm-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e293b;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .delete-confirm-subtitle {
+            color: #64748b;
+            text-align: center;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+        
+        .delete-item-details {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 4px solid #ef4444;
+        }
+        
+        .delete-item-title {
+            font-weight: 600;
+            color: #dc2626;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .delete-item-title i {
+            margin-right: 8px;
+        }
+        
+        .delete-item-info {
+            color: #7f1d1d;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .delete-warning {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .delete-warning-title {
+            font-weight: 600;
+            color: #d97706;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .delete-warning-title i {
+            margin-right: 8px;
+        }
+        
+        .delete-warning-text {
+            color: #92400e;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .delete-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+        
+        .delete-confirm-btn {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+        }
+        
+        .delete-confirm-btn-confirm {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        
+        .delete-confirm-btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+        }
+        
+        .delete-confirm-btn-cancel {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            color: #475569;
+            border-color: #cbd5e1;
+        }
+        
+        .delete-confirm-btn-cancel:hover {
+            background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
+            transform: translateY(-2px);
+        }
+        
+        .delete-confirm-btn i {
+            margin-right: 8px;
+        }
+        
+        /* টেবিল বাটন গ্রুপ */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .edit-btn {
+            transition: all 0.3s ease;
+            color: #3b82f6;
+        }
+        
+        .edit-btn:hover {
+            color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        
+        /* টাইপ স্পেসিফিক ডিলিট বাটন স্টাইল */
+        .delete-btn-student {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .delete-btn-teacher {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .delete-btn-attendance {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .delete-btn-finance {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
     </style>
 </head>
@@ -727,11 +952,6 @@
             </div>
         </div>
     </div>
-
-    <!-- পাসওয়ার্ড দেখার বাটন (শুধু ডেভেলপারদের জন্য) -->
-    <button id="showPasswordBtn" class="show-password" onclick="togglePasswordHint()">
-        <i class="fas fa-key mr-1"></i>পাসওয়ার্ড দেখুন
-    </button>
 
     <!-- মূল অ্যাপ কন্টেন্ট (লগইনের পর শো হবে) -->
     <div id="appContent" class="hidden min-h-screen p-4 md:p-8">
@@ -1245,6 +1465,58 @@
         </div>
     </div>
 
+    <!-- ডিলিট কনফার্মেশন মডেল -->
+    <div id="deleteConfirmModal" class="modal-overlay hidden">
+        <div class="modal-content delete-confirm-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-trash-alt"></i>
+                    মুছে ফেলার কনফার্মেশন
+                </h3>
+                <button onclick="hideModal('deleteConfirmModal')" class="close-button">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="text-center">
+                <div class="delete-confirm-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3 class="delete-confirm-title" id="deleteTitle">আপনি কি নিশ্চিত?</h3>
+                <p class="delete-confirm-subtitle" id="deleteSubtitle">এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না</p>
+                
+                <div class="delete-item-details">
+                    <div class="delete-item-title">
+                        <i class="fas fa-info-circle"></i>
+                        মুছে ফেলার তথ্য
+                    </div>
+                    <div class="delete-item-info" id="deleteItemDetails">
+                        <!-- ডিলিট আইটেমের তথ্য -->
+                    </div>
+                </div>
+                
+                <div class="delete-warning">
+                    <div class="delete-warning-title">
+                        <i class="fas fa-exclamation-circle"></i>
+                        সতর্কতা
+                    </div>
+                    <div class="delete-warning-text" id="deleteWarning">
+                        এই তথ্যটি স্থায়ীভাবে মুছে যাবে এবং পুনরুদ্ধার করা যাবে না। দয়া করে নিশ্চিত করুন যে আপনি সঠিক তথ্য মুছতে চান।
+                    </div>
+                </div>
+                
+                <div class="delete-buttons">
+                    <button onclick="cancelDelete()" class="delete-confirm-btn delete-confirm-btn-cancel">
+                        <i class="fas fa-times mr-2"></i>বাতিল
+                    </button>
+                    <button onclick="confirmDelete()" class="delete-confirm-btn delete-confirm-btn-confirm">
+                        <i class="fas fa-trash-alt mr-2"></i>মুছে ফেলুন
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- উন্নত মডেল ফরম - ছাত্র যোগ -->
     <div id="addStudentModal" class="modal-overlay hidden">
         <div class="modal-content">
@@ -1640,7 +1912,11 @@
         let currentTeacherEditId = null;
         let currentAttendanceEditId = null;
         let selectedRole = 'admin'; // ডিফল্ট এডমিন সিলেক্টেড
-        let passwordHintVisible = false; // পাসওয়ার্ড হিন্ট দৃশ্যমান কিনা
+        
+        // ডিলিট ভেরিয়েবল
+        let deleteType = null;
+        let deleteId = null;
+        let deleteItemData = null;
 
         // বাংলা সংখ্যা কনভার্টার
         const banglaNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
@@ -1732,36 +2008,6 @@
                 
                 // পাসওয়ার্ড প্লেসহোল্ডার
                 document.getElementById('loginPassword').placeholder = 'ইউজার পাসওয়ার্ড লিখুন';
-            }
-        }
-
-        // পাসওয়ার্ড হিন্ট টগল
-        function togglePasswordHint() {
-            passwordHintVisible = !passwordHintVisible;
-            const showPasswordBtn = document.getElementById('showPasswordBtn');
-            
-            if (passwordHintVisible) {
-                showPasswordBtn.innerHTML = '<i class="fas fa-eye-slash mr-1"></i>পাসওয়ার্ড লুকান';
-                
-                // পাসওয়ার্ড হিন্ট দেখাও
-                if (selectedRole === 'admin') {
-                    document.getElementById('currentRoleCreds').innerHTML = 
-                        'ইমেইল: admin@madrasa.com | পাসওয়ার্ড: password123';
-                } else {
-                    document.getElementById('currentRoleCreds').innerHTML = 
-                        'ইমেইল: user@madrasa.com | পাসওয়ার্ড: viewer123';
-                }
-            } else {
-                showPasswordBtn.innerHTML = '<i class="fas fa-key mr-1"></i>পাসওয়ার্ড দেখুন';
-                
-                // পাসওয়ার্ড হিন্ট লুকাও
-                if (selectedRole === 'admin') {
-                    document.getElementById('currentRoleCreds').innerHTML = 
-                        'ইমেইল: admin@madrasa.com';
-                } else {
-                    document.getElementById('currentRoleCreds').innerHTML = 
-                        'ইমেইল: user@madrasa.com';
-                }
             }
         }
 
@@ -1904,6 +2150,140 @@
                 });
         }
 
+        // উন্নত ডিলিট কনফার্মেশন শো করা
+        function showDeleteConfirmation(type, id, itemData) {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
+                return;
+            }
+            
+            deleteType = type;
+            deleteId = id;
+            deleteItemData = itemData;
+            
+            const deleteTitle = document.getElementById('deleteTitle');
+            const deleteSubtitle = document.getElementById('deleteSubtitle');
+            const deleteItemDetails = document.getElementById('deleteItemDetails');
+            const deleteWarning = document.getElementById('deleteWarning');
+            
+            let itemName = '';
+            let itemDetails = '';
+            let warningText = '';
+            
+            switch(type) {
+                case 'students':
+                    deleteTitle.textContent = 'ছাত্র/ছাত্রী মুছে ফেলুন?';
+                    deleteSubtitle.textContent = 'এই ছাত্র/ছাত্রীর সকল তথ্য স্থায়ীভাবে মুছে যাবে';
+                    itemName = itemData.name || 'নাম জানা নেই';
+                    itemDetails = `
+                        <strong>নাম:</strong> ${itemName}<br>
+                        <strong>শ্রেণি:</strong> ${itemData.class}ম শ্রেণি<br>
+                        <strong>রোল নং:</strong> ${itemData.roll}<br>
+                        <strong>আইডি নং:</strong> ${itemData.studentIdNumber || 'N/A'}
+                    `;
+                    warningText = 'এই ছাত্র/ছাত্রীর সকল শিক্ষণীয় তথ্য, হাজিরা রেকর্ড এবং অন্যান্য ডেটা মুছে যাবে।';
+                    break;
+                    
+                case 'teachers':
+                    deleteTitle.textContent = 'শিক্ষক/কর্মচারী মুছে ফেলুন?';
+                    deleteSubtitle.textContent = 'এই শিক্ষক/কর্মচারীর সকল তথ্য স্থায়ীভাবে মুছে যাবে';
+                    itemName = itemData.name || 'নাম জানা নেই';
+                    itemDetails = `
+                        <strong>নাম:</strong> ${itemName}<br>
+                        <strong>পদবী:</strong> ${itemData.designation}<br>
+                        <strong>ইনডেক্স নং:</strong> ${itemData.teacherId}<br>
+                        <strong>বেতন:</strong> ৳ ${itemData.salary ? itemData.salary.toLocaleString('bn-BD') : 'N/A'}
+                    `;
+                    warningText = 'এই শিক্ষক/কর্মচারীর সকল হাজিরা রেকর্ড, বেতন তথ্য এবং অন্যান্য ডেটা মুছে যাবে।';
+                    break;
+                    
+                case 'attendance':
+                    deleteTitle.textContent = 'হাজিরা রেকর্ড মুছে ফেলুন?';
+                    deleteSubtitle.textContent = 'এই হাজিরা রেকর্ড স্থায়ীভাবে মুছে যাবে';
+                    const teacher = teachers.find(t => t.id === itemData.teacherId) || {};
+                    const date = new Date(itemData.date);
+                    const banglaDate = `${toBanglaNumber(date.getDate())} ${banglaMonths[date.getMonth()]} ${toBanglaNumber(date.getFullYear())}`;
+                    itemDetails = `
+                        <strong>তারিখ:</strong> ${banglaDate}<br>
+                        <strong>শিক্ষক/কর্মচারী:</strong> ${teacher.name || 'N/A'}<br>
+                        <strong>হাজিরার অবস্থা:</strong> ${getStatusText(itemData.status)}<br>
+                        <strong>সময়:</strong> ${itemData.inTime || 'N/A'} - ${itemData.outTime || 'N/A'}
+                    `;
+                    warningText = 'এই হাজিরা রেকর্ড মুছে ফেলা হলে শিক্ষকের মাসিক হাজিরা সারাংশ আপডেট হবে।';
+                    break;
+                    
+                case 'transactions':
+                    deleteTitle.textContent = 'লেনদেন মুছে ফেলুন?';
+                    deleteSubtitle.textContent = 'এই লেনদেন রেকর্ড স্থায়ীভাবে মুছে যাবে';
+                    const transDate = new Date(itemData.date);
+                    const transBanglaDate = `${toBanglaNumber(transDate.getDate())} ${banglaMonths[transDate.getMonth()]} ${toBanglaNumber(transDate.getFullYear())}`;
+                    itemDetails = `
+                        <strong>তারিখ:</strong> ${transBanglaDate}<br>
+                        <strong>খাত:</strong> ${itemData.desc}<br>
+                        <strong>ধরণ:</strong> ${itemData.type === 'income' ? 'আয়' : 'ব্যয়'}<br>
+                        <strong>পরিমাণ:</strong> ৳ ${itemData.amount ? itemData.amount.toLocaleString('bn-BD') : 'N/A'}
+                    `;
+                    warningText = 'এই লেনদেন রেকর্ড মুছে ফেলা হলে মোট আয়/ব্যয়ের হিসাব পুনরায় গণনা করা হবে।';
+                    break;
+            }
+            
+            deleteItemDetails.innerHTML = itemDetails;
+            deleteWarning.textContent = warningText;
+            
+            document.getElementById('deleteConfirmModal').classList.remove('hidden');
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'present': 'উপস্থিত',
+                'absent': 'অনুপস্থিত',
+                'late': 'বিলম্বিত',
+                'leave': 'ছুটি'
+            };
+            
+            return statusMap[status] || status;
+        }
+
+        // ডিলিট কনফার্মেশন
+        function confirmDelete() {
+            if (!deleteType || !deleteId) {
+                hideModal('deleteConfirmModal');
+                return;
+            }
+            
+            deleteFromFirebase(deleteType, deleteId)
+                .then(success => {
+                    if (success) {
+                        showNotification(`${getDeleteTypeText(deleteType)} সফলভাবে মুছে ফেলা হয়েছে!`, 'success');
+                    }
+                });
+            
+            hideModal('deleteConfirmModal');
+            resetDeleteVariables();
+        }
+
+        function getDeleteTypeText(type) {
+            const typeMap = {
+                'students': 'ছাত্র/ছাত্রী',
+                'teachers': 'শিক্ষক/কর্মচারী',
+                'attendance': 'হাজিরা রেকর্ড',
+                'transactions': 'লেনদেন'
+            };
+            
+            return typeMap[type] || 'আইটেম';
+        }
+
+        function cancelDelete() {
+            hideModal('deleteConfirmModal');
+            resetDeleteVariables();
+        }
+
+        function resetDeleteVariables() {
+            deleteType = null;
+            deleteId = null;
+            deleteItemData = null;
+        }
+
         // লগইন সিস্টেম
         function login() {
             const email = document.getElementById('loginEmail').value.trim();
@@ -1969,9 +2349,6 @@
                     loginModal.style.display = 'none';
                     loginModal.classList.add('hidden');
                 }
-                
-                // পাসওয়ার্ড হিন্ট বাটন লুকাও
-                document.getElementById('showPasswordBtn').style.display = 'none';
                 
                 // অ্যাপ কন্টেন্ট দেখাও
                 const appContent = document.getElementById('appContent');
@@ -2039,9 +2416,6 @@
                 loginModal.style.display = 'flex';
                 loginModal.classList.remove('hidden');
             }
-            
-            // পাসওয়ার্ড হিন্ট বাটন দেখাও
-            document.getElementById('showPasswordBtn').style.display = 'block';
             
             // ফর্ম রিসেট (শুধু পাসওয়ার্ড)
             document.getElementById('loginPassword').value = '';
@@ -2348,18 +2722,9 @@
         }
 
         function deleteStudent(studentId) {
-            if (!currentUser || currentUser.role !== 'admin') {
-                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
-                return;
-            }
-            
-            if (confirm('আপনি কি এই ছাত্র/ছাত্রীর তথ্য মুছতে চান?')) {
-                deleteFromFirebase('students', studentId)
-                    .then(success => {
-                        if (success) {
-                            showNotification('ছাত্র/ছাত্রীর তথ্য মুছে ফেলা হয়েছে!', 'success');
-                        }
-                    });
+            const student = students.find(s => s.id === studentId);
+            if (student) {
+                showDeleteConfirmation('students', studentId, student);
             }
         }
 
@@ -2398,16 +2763,18 @@
                     <td class="p-4 text-gray-700">${student.mobile || 'N/A'}</td>
                     <td class="p-4 text-gray-700">${student.village}</td>
                     <td class="p-4">
-                        ${currentUser && currentUser.role === 'admin' ? `
-                            <button onclick="showEditStudentModal('${student.id}')" class="text-blue-600 hover:text-blue-800 mr-3 p-2 rounded-lg hover:bg-blue-50 transition duration-200">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button onclick="deleteStudent('${student.id}')" class="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-50 transition duration-200">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        ` : `
-                            <span class="text-gray-400 text-sm">শুধুমাত্র দেখুন</span>
-                        `}
+                        <div class="action-buttons">
+                            ${currentUser && currentUser.role === 'admin' ? `
+                                <button onclick="showEditStudentModal('${student.id}')" class="edit-btn p-2 rounded-lg hover:bg-blue-50 transition duration-200" title="এডিট করুন">
+                                    <i class="fas fa-edit text-blue-600"></i>
+                                </button>
+                                <button onclick="deleteStudent('${student.id}')" class="delete-btn delete-btn-student" title="মুছে ফেলুন">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            ` : `
+                                <span class="text-gray-400 text-sm">শুধুমাত্র দেখুন</span>
+                            `}
+                        </div>
                     </td>
                 </tr>
             `).join('');
@@ -2488,18 +2855,9 @@
         }
 
         function deleteTeacher(teacherId) {
-            if (!currentUser || currentUser.role !== 'admin') {
-                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
-                return;
-            }
-            
-            if (confirm('আপনি কি এই শিক্ষক/কর্মচারীর তথ্য মুছতে চান?')) {
-                deleteFromFirebase('teachers', teacherId)
-                    .then(success => {
-                        if (success) {
-                            showNotification('শিক্ষক/কর্মচারীর তথ্য মুছে ফেলা হয়েছে!', 'success');
-                        }
-                    });
+            const teacher = teachers.find(t => t.id === teacherId);
+            if (teacher) {
+                showDeleteConfirmation('teachers', teacherId, teacher);
             }
         }
 
@@ -2533,16 +2891,18 @@
                     <td class="p-4 font-bold text-gray-800">৳ ${toBanglaNumber(teacher.salary.toLocaleString('bn-BD'))}</td>
                     <td class="p-4 text-gray-700">${new Date(teacher.joiningDate).toLocaleDateString('bn-BD')}</td>
                     <td class="p-4">
-                        ${currentUser && currentUser.role === 'admin' ? `
-                            <button onclick="showEditTeacherModal('${teacher.id}')" class="text-blue-600 hover:text-blue-800 mr-3 p-2 rounded-lg hover:bg-blue-50 transition duration-200">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button onclick="deleteTeacher('${teacher.id}')" class="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-50 transition duration-200">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        ` : `
-                            <span class="text-gray-400 text-sm">শুধুমাত্র দেখুন</span>
-                        `}
+                        <div class="action-buttons">
+                            ${currentUser && currentUser.role === 'admin' ? `
+                                <button onclick="showEditTeacherModal('${teacher.id}')" class="edit-btn p-2 rounded-lg hover:bg-blue-50 transition duration-200" title="এডিট করুন">
+                                    <i class="fas fa-edit text-blue-600"></i>
+                                </button>
+                                <button onclick="deleteTeacher('${teacher.id}')" class="delete-btn delete-btn-teacher" title="মুছে ফেলুন">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            ` : `
+                                <span class="text-gray-400 text-sm">শুধুমাত্র দেখুন</span>
+                            `}
+                        </div>
                     </td>
                 </tr>
             `).join('');
@@ -2587,18 +2947,9 @@
         }
 
         function deleteTransaction(id) {
-            if (!currentUser || currentUser.role !== 'admin') {
-                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
-                return;
-            }
-            
-            if(confirm('আপনি কি এই লেনদেনটি মুছতে চান?')) {
-                deleteFromFirebase('transactions', id)
-                    .then(success => {
-                        if (success) {
-                            showNotification('লেনদেন মুছে ফেলা হয়েছে!', 'success');
-                        }
-                    });
+            const transaction = transactions.find(t => t.id === id);
+            if (transaction) {
+                showDeleteConfirmation('transactions', id, transaction);
             }
         }
 
@@ -2639,7 +2990,7 @@
                             </td>
                             <td class="p-4">
                                 ${currentUser && currentUser.role === 'admin' ? `
-                                    <button onclick="deleteTransaction('${t.id}')" class="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-50 transition duration-200">
+                                    <button onclick="deleteTransaction('${t.id}')" class="delete-btn delete-btn-finance" title="মুছে ফেলুন">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 ` : `
@@ -2781,16 +3132,18 @@
                         <td class="p-4 text-gray-700">${record.outTime || 'N/A'}</td>
                         <td class="p-4 text-gray-700 text-sm">${record.comments || 'N/A'}</td>
                         <td class="p-4">
-                            ${currentUser && currentUser.role === 'admin' ? `
-                                <button onclick="editAttendance('${record.id}')" class="text-blue-600 hover:text-blue-800 mr-3 p-2 rounded-lg hover:bg-blue-50 transition duration-200">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deleteAttendance('${record.id}')" class="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-50 transition duration-200">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            ` : `
-                                <span class="text-gray-400 text-sm">${toBanglaNumber(index + 1)}</span>
-                            `}
+                            <div class="action-buttons">
+                                ${currentUser && currentUser.role === 'admin' ? `
+                                    <button onclick="editAttendance('${record.id}')" class="edit-btn p-2 rounded-lg hover:bg-blue-50 transition duration-200" title="এডিট করুন">
+                                        <i class="fas fa-edit text-blue-600"></i>
+                                    </button>
+                                    <button onclick="deleteAttendance('${record.id}')" class="delete-btn delete-btn-attendance" title="মুছে ফেলুন">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                ` : `
+                                    <span class="text-gray-400 text-sm">${toBanglaNumber(index + 1)}</span>
+                                `}
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -2979,18 +3332,9 @@
 
         // হাজিরা ডিলিট
         function deleteAttendance(attendanceId) {
-            if (!currentUser || currentUser.role !== 'admin') {
-                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
-                return;
-            }
-            
-            if (confirm('আপনি কি এই হাজিরা রেকর্ড মুছতে চান?')) {
-                deleteFromFirebase('attendance', attendanceId)
-                    .then(success => {
-                        if (success) {
-                            showNotification('হাজিরা রেকর্ড মুছে ফেলা হয়েছে!', 'success');
-                        }
-                    });
+            const record = attendanceRecords.find(a => a.id === attendanceId);
+            if (record) {
+                showDeleteConfirmation('attendance', attendanceId, record);
             }
         }
 
@@ -3046,17 +3390,6 @@
             });
             
             downloadCSV(csvContent, 'মাদ্রাসা_হাজিরা_তথ্য_১৮৭৫২');
-        }
-
-        function getStatusText(status) {
-            const statusMap = {
-                'present': 'উপস্থিত',
-                'absent': 'অনুপস্থিত',
-                'late': 'বিলম্বিত',
-                'leave': 'ছুটি'
-            };
-            
-            return statusMap[status] || status;
         }
 
         function downloadCSV(content, filename) {
@@ -3187,4 +3520,3 @@
     </script>
 </body>
 </html>
-
