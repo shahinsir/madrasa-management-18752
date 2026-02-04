@@ -1039,6 +1039,25 @@
         .hidden {
             display: none !important;
         }
+        
+        /* ফাইন্যান্স এডিট স্টাইলস */
+        .finance-edit-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .finance-edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -1535,10 +1554,20 @@
             <!-- আর্থিক ব্যবস্থাপনা সেকশন -->
             <div id="section-finance" class="section-content hidden">
                 <div class="glass-card p-6 mb-6">
-                    <h3 class="text-2xl font-bold text-gray-700 mb-6">
-                        <i class="fas fa-money-bill-wave mr-2 text-red-500"></i>
-                        আর্থিক হিসাব ব্যবস্থাপনা
-                    </h3>
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-700 mb-4 md:mb-0">
+                            <i class="fas fa-money-bill-wave mr-2 text-red-500"></i>
+                            আর্থিক হিসাব ব্যবস্থাপনা
+                        </h3>
+                        <div class="flex space-x-2">
+                            <button onclick="exportFinancialData()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 shadow-md">
+                                <i class="fas fa-file-export mr-2"></i>এক্সপোর্ট
+                            </button>
+                            <button id="addFinanceBtn" onclick="showFinanceModal()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300 shadow-md">
+                                <i class="fas fa-plus-circle mr-2"></i>নতুন লেনদেন যোগ করুন
+                            </button>
+                        </div>
+                    </div>
                     
                     <!-- আর্থিক সারাংশ -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -1564,25 +1593,6 @@
                                 <i class="fas fa-wallet text-2xl opacity-80"></i>
                             </div>
                             <p class="text-3xl font-bold mt-2">৳ <span id="financeBalance">০</span></p>
-                        </div>
-                    </div>
-
-                    <!-- লেনদেন ফর্ম -->
-                    <div id="financeForm" class="mb-8 hidden">
-                        <h4 class="text-xl font-semibold mb-4 text-gray-700">
-                            <i class="fas fa-plus-circle mr-2 text-blue-500"></i>নতুন লেনদেন যোগ করুন
-                        </h4>
-                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                            <input id="financeDesc" type="text" placeholder="খাতের বিবরণ" class="p-3 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <input id="financeAmount" type="number" placeholder="পরিমাণ (৳)" class="p-3 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <input id="financeDate" type="date" class="p-3 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <select id="financeType" class="p-3 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="income">আয়</option>
-                                <option value="expense">ব্যয়</option>
-                            </select>
-                            <button onclick="addFinancialTransaction()" class="bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md">
-                                <i class="fas fa-plus mr-2"></i>যোগ করুন
-                            </button>
                         </div>
                     </div>
 
@@ -2307,6 +2317,70 @@
         </div>
     </div>
 
+    <!-- আর্থিক লেনদেন যোগ/এডিট মডেল -->
+    <div id="financeModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span id="financeModalTitle">নতুন লেনদেন যোগ করুন</span>
+                </h3>
+                <button onclick="hideModal('financeModal')" class="close-button">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-info-circle"></i>লেনদেন তথ্য
+                </h4>
+                <div class="form-grid">
+                    <div>
+                        <label class="form-label">খাতের বিবরণ*</label>
+                        <input id="financeDesc" type="text" class="form-input" placeholder="খাতের বিবরণ লিখুন">
+                    </div>
+                    <div>
+                        <label class="form-label">পরিমাণ (৳)*</label>
+                        <input id="financeAmount" type="number" class="form-input" placeholder="পরিমাণ লিখুন">
+                    </div>
+                    <div>
+                        <label class="form-label">তারিখ*</label>
+                        <input id="financeDate" type="date" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">ধরণ*</label>
+                        <select id="financeType" class="form-input">
+                            <option value="">ধরণ নির্বাচন করুন</option>
+                            <option value="income">আয়</option>
+                            <option value="expense">ব্যয়</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h4 class="section-title">
+                    <i class="fas fa-comment-alt"></i>অতিরিক্ত তথ্য
+                </h4>
+                <div class="form-grid">
+                    <div class="col-span-2">
+                        <label class="form-label">মন্তব্য/বিবরণ</label>
+                        <textarea id="financeNotes" class="form-input" rows="3" placeholder="অতিরিক্ত মন্তব্য বা বিবরণ..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 flex justify-end space-x-3">
+                <button onclick="hideModal('financeModal')" class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-300 font-medium">
+                    <i class="fas fa-times mr-2"></i>বাতিল
+                </button>
+                <button onclick="saveFinancialTransaction()" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300 font-medium shadow-md">
+                    <i class="fas fa-save mr-2"></i>সংরক্ষণ করুন
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Firebase Configuration
         const firebaseConfig = {
@@ -2334,6 +2408,7 @@
         let currentStudentEditId = null;
         let currentTeacherEditId = null;
         let currentAttendanceEditId = null;
+        let currentTransactionEditId = null; // নতুন ভেরিয়েবল
         let selectedRole = 'admin';
         
         // ডিলিট ভেরিয়েবল
@@ -2437,30 +2512,30 @@
             const addStudentBtn = document.getElementById('addStudentBtn');
             const addTeacherBtn = document.getElementById('addTeacherBtn');
             const addAttendanceBtn = document.getElementById('addAttendanceBtn');
-            const financeForm = document.getElementById('financeForm');
+            const addFinanceBtn = document.getElementById('addFinanceBtn');
             
             if (isAdmin) {
                 if (addStudentBtn) addStudentBtn.classList.remove('hidden');
                 if (addTeacherBtn) addTeacherBtn.classList.remove('hidden');
                 if (addAttendanceBtn) addAttendanceBtn.classList.remove('hidden');
-                if (financeForm) financeForm.classList.remove('hidden');
+                if (addFinanceBtn) addFinanceBtn.classList.remove('hidden');
             } else {
                 if (addStudentBtn) addStudentBtn.classList.add('hidden');
                 if (addTeacherBtn) addTeacherBtn.classList.add('hidden');
                 if (addAttendanceBtn) addAttendanceBtn.classList.add('hidden');
-                if (financeForm) financeForm.classList.add('hidden');
+                if (addFinanceBtn) addFinanceBtn.classList.add('hidden');
             }
         }
 
-        // Firebase থেকে ডেটা লোড - শুধু ডিলিট করা হয়নি এমন আইটেম লোড করো
+        // Firebase থেকে ডেটা লোড - শুধু isDeleted: false আইটেম লোড করো
         function loadDataFromFirebase() {
-            // ছাত্র ডেটা - শুধু deleted: false বা undefined আইটেম
-            database.ref('madrasa_18752/students').on('value', (snapshot) => {
+            // ছাত্র ডেটা - শুধু isDeleted: false এমন আইটেম
+            database.ref('madrasa_18752/students').orderByChild('isDeleted').equalTo(false).on('value', (snapshot) => {
                 students = [];
                 snapshot.forEach((childSnapshot) => {
                     const data = childSnapshot.val();
                     // শুধু ডিলিট করা হয়নি এমন ছাত্র লোড করো
-                    if (!data.deleted) {
+                    if (data && data.id && data.isDeleted !== true) {
                         students.push({ id: childSnapshot.key, ...data });
                     }
                 });
@@ -2470,11 +2545,11 @@
             });
 
             // শিক্ষক ডেটা
-            database.ref('madrasa_18752/teachers').on('value', (snapshot) => {
+            database.ref('madrasa_18752/teachers').orderByChild('isDeleted').equalTo(false).on('value', (snapshot) => {
                 teachers = [];
                 snapshot.forEach((childSnapshot) => {
                     const data = childSnapshot.val();
-                    if (!data.deleted) {
+                    if (data && data.id && data.isDeleted !== true) {
                         teachers.push({ id: childSnapshot.key, ...data });
                     }
                 });
@@ -2484,11 +2559,11 @@
             });
 
             // লেনদেন ডেটা
-            database.ref('madrasa_18752/transactions').on('value', (snapshot) => {
+            database.ref('madrasa_18752/transactions').orderByChild('isDeleted').equalTo(false).on('value', (snapshot) => {
                 transactions = [];
                 snapshot.forEach((childSnapshot) => {
                     const data = childSnapshot.val();
-                    if (!data.deleted) {
+                    if (data && data.id && data.isDeleted !== true) {
                         transactions.push({ id: childSnapshot.key, ...data });
                     }
                 });
@@ -2498,11 +2573,11 @@
             });
 
             // হাজিরা ডেটা
-            database.ref('madrasa_18752/attendance').on('value', (snapshot) => {
+            database.ref('madrasa_18752/attendance').orderByChild('isDeleted').equalTo(false).on('value', (snapshot) => {
                 attendanceRecords = [];
                 snapshot.forEach((childSnapshot) => {
                     const data = childSnapshot.val();
-                    if (!data.deleted) {
+                    if (data && data.id && data.isDeleted !== true) {
                         attendanceRecords.push({ id: childSnapshot.key, ...data });
                     }
                 });
@@ -2515,7 +2590,11 @@
             database.ref('madrasa_18752/recycle_bin').on('value', (snapshot) => {
                 recycleBinItems = [];
                 snapshot.forEach((childSnapshot) => {
-                    recycleBinItems.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                    const item = { id: childSnapshot.key, ...childSnapshot.val() };
+                    // শুধু ডিলিট করা আইটেম দেখাও (যেগুলো isDeleted: true)
+                    if (item.isDeleted === true) {
+                        recycleBinItems.push(item);
+                    }
                 });
                 updateRecycleBinSummary();
                 loadRecycleBinTable();
@@ -2553,7 +2632,11 @@
             } else {
                 // নিউ
                 const newId = database.ref(path).push().key;
-                return database.ref(`${path}/${newId}`).set({ ...data, id: newId })
+                return database.ref(`${path}/${newId}`).set({ 
+                    ...data, 
+                    id: newId,
+                    isDeleted: false // নতুন আইটেমের জন্য isDeleted: false সেট
+                })
                     .then(() => {
                         updateSyncStatus('ডেটা যোগ হয়েছে');
                         return true;
@@ -2565,25 +2648,39 @@
             }
         }
 
-        // রিসাইকেল বিনে আইটেম যোগ
-        function addToRecycleBin(itemType, itemId, itemData, deletedBy, reason = 'ম্যানুয়ালি মুছে ফেলা হয়েছে') {
-            const recycleData = {
-                itemType: itemType,
-                originalId: itemId,
-                itemData: itemData,
-                deletedBy: deletedBy,
-                deletedAt: new Date().toISOString(),
-                reason: reason
-            };
+        // আইটেম ডিলিট করার ফাংশন (মেইন ফাইল থেকে সরায় না, শুধু isDeleted: true করে)
+        function deleteItemFromFirebase(type, id, itemData, reason = 'ম্যানুয়ালি মুছে ফেলা হয়েছে') {
+            const userEmail = currentUser ? currentUser.email : 'Unknown';
+            const deletedAt = new Date().toISOString();
             
-            return database.ref('madrasa_18752/recycle_bin').push(recycleData)
-                .then(() => {
-                    return true;
-                })
-                .catch(error => {
-                    console.error('রিসাইকেল বিনে যোগ করার সময় ত্রুটি:', error);
-                    return false;
-                });
+            // প্রথমে আইটেমটিকে isDeleted: true করো
+            return database.ref(`madrasa_18752/${type}/${id}`).update({
+                isDeleted: true,
+                deletedAt: deletedAt,
+                deletedBy: userEmail,
+                deleteReason: reason
+            })
+            .then(() => {
+                // তারপর রিসাইকেল বিনে যোগ করো
+                const recycleData = {
+                    itemType: type,
+                    originalId: id,
+                    itemData: itemData,
+                    deletedBy: userEmail,
+                    deletedAt: deletedAt,
+                    reason: reason,
+                    isDeleted: true
+                };
+                
+                return database.ref('madrasa_18752/recycle_bin').push(recycleData);
+            })
+            .then(() => {
+                return true;
+            })
+            .catch(error => {
+                console.error('ডিলিট করতে সমস্যা:', error);
+                return false;
+            });
         }
 
         // রিসাইকেল বিন থেকে আইটেম মুছে ফেলা
@@ -2679,11 +2776,11 @@
                         <td class="p-4 text-gray-700">${item.reason}</td>
                         <td class="p-4">
                             <div class="action-buttons">
-                                <button onclick="showRestoreConfirmation('${item.id}')" class="restore-btn" title="পুনরুদ্ধার করুন">
+                                <button onclick="showRestoreConfirmation('${item.id}', '${item.itemType}', '${item.originalId}')" class="restore-btn" title="পুনরুদ্ধার করুন">
                                     <i class="fas fa-trash-restore"></i>
                                     পুনরুদ্ধার
                                 </button>
-                                <button onclick="showPermanentDeleteConfirmation('${item.id}')" class="permanent-delete-btn" title="স্থায়ীভাবে মুছে ফেলুন">
+                                <button onclick="showPermanentDeleteConfirmation('${item.id}', '${item.itemType}', '${item.originalId}')" class="permanent-delete-btn" title="স্থায়ীভাবে মুছে ফেলুন">
                                     <i class="fas fa-skull-crossbones"></i>
                                     স্থায়ী ডিলিট
                                 </button>
@@ -2704,7 +2801,8 @@
                 case 'teachers':
                     return item.itemData.name || 'নাম জানা নেই';
                 case 'attendance':
-                    return item.itemData.teacherName || 'হাজিরা রেকর্ড';
+                    const teacher = teachers.find(t => t.id === item.itemData.teacherId);
+                    return teacher ? teacher.name : 'হাজিরা রেকর্ড';
                 case 'transactions':
                     return item.itemData.desc || 'লেনদেন';
                 default:
@@ -2730,7 +2828,7 @@
         }
 
         // পুনরুদ্ধার কনফার্মেশন দেখাও
-        function showRestoreConfirmation(recycleId) {
+        function showRestoreConfirmation(recycleId, itemType, originalId) {
             if (!currentUser || currentUser.role !== 'admin') {
                 showNotification('শুধুমাত্র এডমিন আইটেম পুনরুদ্ধার করতে পারেন!', 'error');
                 return;
@@ -2743,6 +2841,8 @@
             }
             
             restoreRecycleId = recycleId;
+            restoreItemType = itemType;
+            restoreOriginalId = originalId;
             
             const restoreTitle = document.getElementById('restoreTitle');
             const restoreSubtitle = document.getElementById('restoreSubtitle');
@@ -2760,13 +2860,13 @@
                 <strong>মুছে ফেলা হয়েছে:</strong> ${new Date(recycleItem.deletedAt).toLocaleDateString('bn-BD')}<br>
                 <strong>মুছে ফেলেছেন:</strong> ${recycleItem.deletedBy}
             `;
-            restoreWarning.textContent = 'এই আইটেমটি রিসাইকেল বিন থেকে মূল ডেটাবেসে স্থানান্তরিত হবে এবং রিসাইকেল বিন থেকে মুছে যাবে।';
+            restoreWarning.textContent = 'এই আইটেমটি রিসাইকেল বিন থেকে মূল ডেটাবেসে ফিরিয়ে আনা হবে।';
             
             document.getElementById('restoreConfirmModal').classList.remove('hidden');
         }
 
         // স্থায়ীভাবে মুছে ফেলার কনফার্মেশন দেখাও
-        function showPermanentDeleteConfirmation(recycleId) {
+        function showPermanentDeleteConfirmation(recycleId, itemType, originalId) {
             if (!currentUser || currentUser.role !== 'admin') {
                 showNotification('শুধুমাত্র এডমিন স্থায়ীভাবে মুছে ফেলতে পারেন!', 'error');
                 return;
@@ -2779,6 +2879,8 @@
             }
             
             permanentDeleteRecycleId = recycleId;
+            permanentDeleteItemType = itemType;
+            permanentDeleteOriginalId = originalId;
             
             const permanentDeleteTitle = document.getElementById('permanentDeleteTitle');
             const permanentDeleteSubtitle = document.getElementById('permanentDeleteSubtitle');
@@ -2816,9 +2918,9 @@
                 return;
             }
             
-            // মূল ডেটাবেসে পুনরুদ্ধার - deleted: false সেট করো
+            // মূল আইটেমকে isDeleted: false করা
             database.ref(`madrasa_18752/${recycleItem.itemType}/${recycleItem.originalId}`).update({
-                deleted: false,
+                isDeleted: false,
                 restoredAt: new Date().toISOString(),
                 restoredBy: currentUser.email
             })
@@ -2829,7 +2931,6 @@
             .then(() => {
                 showNotification('আইটেম সফলভাবে পুনরুদ্ধার করা হয়েছে!', 'success');
                 hideModal('restoreConfirmModal');
-                restoreRecycleId = null;
                 
                 // ডেটা রিলোড করো
                 setTimeout(() => {
@@ -2856,7 +2957,7 @@
                 return;
             }
             
-            // প্রথমে মূল ডেটাবেস থেকে সম্পূর্ণ মুছে ফেলো
+            // প্রথমে মূল ডেটা থেকে সম্পূর্ণ মুছে ফেলো
             database.ref(`madrasa_18752/${recycleItem.itemType}/${recycleItem.originalId}`).remove()
                 .then(() => {
                     // তারপর রিসাইকেল বিন থেকে মুছে ফেলো
@@ -2865,7 +2966,6 @@
                 .then(() => {
                     showNotification('আইটেম স্থায়ীভাবে মুছে ফেলা হয়েছে!', 'success');
                     hideModal('permanentDeleteModal');
-                    permanentDeleteRecycleId = null;
                     
                     // রিসাইকেল বিন রিফ্রেশ
                     setTimeout(() => {
@@ -2894,14 +2994,17 @@
                 return;
             }
             
-            // সব আইটেমের মূল ডেটা মুছে ফেলো
+            // প্রথমে সব আইটেমের মূল ডেটা মুছে ফেলো
             const deletePromises = recycleBinItems.map(item => {
-                return database.ref(`madrasa_18752/${item.itemType}/${item.originalId}`).remove();
+                return database.ref(`madrasa_18752/${item.itemType}/${item.originalId}`).remove()
+                    .catch(error => {
+                        console.error(`মূল ডেটা মুছে ফেলতে সমস্যা: ${error}`);
+                    });
             });
             
-            // সব প্রমিস রিজল্ভ হলে রিসাইকেল বিন খালি করো
             Promise.all(deletePromises)
                 .then(() => {
+                    // তারপর রিসাইকেল বিন খালি করো
                     return database.ref('madrasa_18752/recycle_bin').remove();
                 })
                 .then(() => {
@@ -2915,7 +3018,7 @@
                 });
         }
 
-        // উন্নত ডিলিট কনফার্মেশন শো করা (রিসাইকেল বিনে পাঠানো সহ)
+        // উন্নত ডিলিট কনফার্মেশন শো করা
         function showDeleteConfirmation(type, id, itemData) {
             if (!currentUser || currentUser.role !== 'admin') {
                 showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
@@ -3009,25 +3112,14 @@
             return statusMap[status] || status;
         }
 
-        // ডিলিট কনফার্মেশন (রিসাইকেল বিনে পাঠানো)
+        // ডিলিট কনফার্মেশন (isDeleted: true করা)
         function confirmDelete() {
             if (!deleteType || !deleteId) {
                 hideModal('deleteConfirmModal');
                 return;
             }
             
-            const userEmail = currentUser ? currentUser.email : 'Unknown';
-            
-            // প্রথমে রিসাইকেল বিনে যোগ করো
-            addToRecycleBin(deleteType, deleteId, deleteItemData, userEmail, 'ম্যানুয়ালি মুছে ফেলা হয়েছে')
-                .then(() => {
-                    // তারপর মূল ডেটাতে deleted: true সেট করো
-                    return database.ref(`madrasa_18752/${deleteType}/${deleteId}`).update({
-                        deleted: true,
-                        deletedAt: new Date().toISOString(),
-                        deletedBy: userEmail
-                    });
-                })
+            deleteItemFromFirebase(deleteType, deleteId, deleteItemData, 'ম্যানুয়ালি মুছে ফেলা হয়েছে')
                 .then(success => {
                     if (success) {
                         showNotification(`${getDeleteTypeText(deleteType)} সফলভাবে রিসাইকেল বিনে স্থানান্তরিত হয়েছে!`, 'success');
@@ -3286,7 +3378,8 @@
                 district: document.getElementById('studentDistrict').value.trim(),
                 admissionDate: document.getElementById('studentAdmissionDate').value,
                 createdAt: new Date().toISOString(),
-                updatedBy: currentUser.email
+                updatedBy: currentUser.email,
+                isDeleted: false
             };
             
             saveToFirebase('students', studentData, currentStudentEditId)
@@ -3294,6 +3387,7 @@
                     if (success) {
                         hideModal('addStudentModal');
                         showNotification(currentStudentEditId ? 'ছাত্র তথ্য আপডেট করা হয়েছে!' : 'নতুন ছাত্র যোগ করা হয়েছে!', 'success');
+                        loadDataFromFirebase();
                     }
                 });
         }
@@ -3475,7 +3569,8 @@
                 permanentAddress: document.getElementById('teacherPermanentAddress').value.trim(),
                 type,
                 createdAt: new Date().toISOString(),
-                updatedBy: currentUser.email
+                updatedBy: currentUser.email,
+                isDeleted: false
             };
             
             saveToFirebase('teachers', teacherData, currentTeacherEditId)
@@ -3483,6 +3578,7 @@
                     if (success) {
                         hideModal('addTeacherModal');
                         showNotification(currentTeacherEditId ? 'শিক্ষক তথ্য আপডেট করা হয়েছে!' : 'নতুন শিক্ষক যোগ করা হয়েছে!', 'success');
+                        loadDataFromFirebase();
                     }
                 });
         }
@@ -3595,8 +3691,50 @@
             `).join('');
         }
 
-        // আর্থিক ডেটা ম্যানেজমেন্ট
-        function addFinancialTransaction() {
+        // আর্থিক লেনদেন ম্যানেজমেন্ট
+        function showFinanceModal() {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
+                return;
+            }
+            
+            document.getElementById('financeModal').classList.remove('hidden');
+            currentTransactionEditId = null;
+            resetFinanceForm();
+            document.getElementById('financeModalTitle').textContent = 'নতুন লেনদেন যোগ করুন';
+        }
+
+        function showEditTransactionModal(transactionId) {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
+                return;
+            }
+            
+            const transaction = transactions.find(t => t.id === transactionId);
+            if (transaction) {
+                currentTransactionEditId = transactionId;
+                
+                document.getElementById('financeDesc').value = transaction.desc;
+                document.getElementById('financeAmount').value = transaction.amount;
+                document.getElementById('financeDate').value = transaction.date;
+                document.getElementById('financeType').value = transaction.type;
+                document.getElementById('financeNotes').value = transaction.notes || '';
+                
+                document.getElementById('financeModalTitle').textContent = 'লেনদেন এডিট করুন';
+                document.getElementById('financeModal').classList.remove('hidden');
+            }
+        }
+
+        function resetFinanceForm() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('financeDesc').value = '';
+            document.getElementById('financeAmount').value = '';
+            document.getElementById('financeDate').value = today;
+            document.getElementById('financeType').value = '';
+            document.getElementById('financeNotes').value = '';
+        }
+
+        function saveFinancialTransaction() {
             if (!currentUser || currentUser.role !== 'admin') {
                 showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
                 return;
@@ -3605,10 +3743,12 @@
             const desc = document.getElementById('financeDesc').value.trim();
             const amount = parseFloat(document.getElementById('financeAmount').value);
             const type = document.getElementById('financeType').value;
-            const date = document.getElementById('financeDate').value || new Date().toISOString().split('T')[0];
+            const date = document.getElementById('financeDate').value;
+            const notes = document.getElementById('financeNotes').value.trim();
             
-            if(!desc || !amount || amount <= 0) {
-                showNotification("দয়া করে সঠিক তথ্য দিন!", "error");
+            // ভ্যালিডেশন
+            if (!desc || !amount || amount <= 0 || !type || !date) {
+                showNotification('দয়া করে সকল প্রয়োজনীয় তথ্য প্রদান করুন (* চিহ্নিত ফিল্ড)', 'error');
                 return;
             }
             
@@ -3617,18 +3757,18 @@
                 amount, 
                 type,
                 date,
+                notes,
                 timestamp: new Date().toISOString(),
-                addedBy: currentUser.email
+                addedBy: currentUser.email,
+                isDeleted: false
             };
             
-            saveToFirebase('transactions', transactionData)
+            saveToFirebase('transactions', transactionData, currentTransactionEditId)
                 .then(success => {
                     if (success) {
-                        // ফর্ম রিসেট
-                        document.getElementById('financeDesc').value = '';
-                        document.getElementById('financeAmount').value = '';
-                        document.getElementById('financeDate').value = new Date().toISOString().split('T')[0];
-                        showNotification('লেনদেন যোগ করা হয়েছে!', 'success');
+                        hideModal('financeModal');
+                        showNotification(currentTransactionEditId ? 'লেনদেন আপডেট করা হয়েছে!' : 'নতুন লেনদেন যোগ করা হয়েছে!', 'success');
+                        loadDataFromFirebase();
                     }
                 });
         }
@@ -3680,9 +3820,15 @@
                             </td>
                             <td class="p-4">
                                 ${currentUser && currentUser.role === 'admin' ? `
-                                    <button onclick="deleteTransaction('${t.id}')" class="delete-btn delete-btn-finance" title="মুছে ফেলুন">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
+                                    <div class="action-buttons">
+                                        <button onclick="showEditTransactionModal('${t.id}')" class="finance-edit-btn" title="এডিট করুন">
+                                            <i class="fas fa-edit"></i>
+                                            এডিট
+                                        </button>
+                                        <button onclick="deleteTransaction('${t.id}')" class="delete-btn delete-btn-finance" title="মুছে ফেলুন">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
                                 ` : `
                                     <span class="text-gray-400">${toBanglaNumber(index + 1)}</span>
                                 `}
@@ -4024,7 +4170,8 @@
                 leaveType: status === 'leave' ? leaveType : '',
                 comments,
                 recordedBy: currentUser.email,
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                isDeleted: false
             };
             
             saveToFirebase('attendance', attendanceData, currentAttendanceEditId)
@@ -4032,6 +4179,7 @@
                     if (success) {
                         hideModal('addAttendanceModal');
                         showNotification(currentAttendanceEditId ? 'হাজিরা আপডেট করা হয়েছে!' : 'নতুন হাজিরা যোগ করা হয়েছে!', 'success');
+                        loadDataFromFirebase();
                     }
                 });
         }
@@ -4132,6 +4280,26 @@
             });
             
             downloadCSV(csvContent, 'মাদ্রাসা_হাজিরা_তথ্য_১৮৭৫২');
+        }
+
+        function exportFinancialData() {
+            if (transactions.length === 0) {
+                showNotification("রপ্তানি করার জন্য কোন আর্থিক ডেটা নেই!", "error");
+                return;
+            }
+            
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "ক্রমিক,তারিখ,খাতের বিবরণ,ধরণ,পরিমাণ (৳),মন্তব্য,যোগ করার তারিখ\n";
+            
+            transactions.forEach((t, index) => {
+                const date = new Date(t.date);
+                const banglaDate = `${toBanglaNumber(date.getDate())} ${banglaMonths[date.getMonth()]} ${toBanglaNumber(date.getFullYear())}`;
+                const typeText = t.type === 'income' ? 'আয়' : 'ব্যয়';
+                
+                csvContent += `${index + 1},"${banglaDate}","${t.desc}","${typeText}",${t.amount},"${t.notes || ''}","${new Date(t.timestamp).toLocaleDateString('bn-BD')}"\n`;
+            });
+            
+            downloadCSV(csvContent, 'মাদ্রাসা_আর্থিক_তথ্য_১৮৭৫২');
         }
 
         function downloadCSV(content, filename) {
