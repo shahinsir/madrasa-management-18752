@@ -9,8 +9,8 @@
     
     <!-- PWA Configurations -->
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="https://i.ibb.co.com/R4M84kFC/android-chrome-192x192.png">
-    <link rel="apple-touch-icon" href="https://i.ibb.co.com/R4M84kFC/android-chrome-192x192.png">
+    <link rel="icon" href="https://i.ibb.co.com/hhVX9hp/android-chrome-192x192.png">
+    <link rel="apple-touch-icon" href="https://i.ibb.co.com/hhVX9hp/android-chrome-192x192.png">
     <meta name="theme-color" content="#667eea">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -850,6 +850,191 @@
             align-items: center;
             gap: 6px;
         }
+        
+        /* রিসাইকেল বিন স্টাইলস */
+        .recycle-bin-tab {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+        }
+        
+        .recycle-bin-tab:hover {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        
+        .restore-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .restore-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .restore-btn:active {
+            transform: translateY(0);
+        }
+        
+        .empty-recycle-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .empty-recycle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+        }
+        
+        .recycle-icon {
+            color: #6366f1;
+            font-size: 24px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .deleted-item {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-left: 5px solid #ef4444;
+        }
+        
+        .deleted-date {
+            font-size: 12px;
+            color: #6b7280;
+            font-style: italic;
+        }
+        
+        .restored-item {
+            animation: fadeInRestore 0.5s ease-out;
+        }
+        
+        @keyframes fadeInRestore {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .bin-stats {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 12px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .bin-stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .bin-stat-item:last-child {
+            border-bottom: none;
+        }
+        
+        .bin-stat-label {
+            color: #4b5563;
+            font-weight: 500;
+        }
+        
+        .bin-stat-value {
+            color: #1f2937;
+            font-weight: 600;
+        }
+        
+        /* উন্নত রিসাইকেল বিন UI */
+        .recycle-modal {
+            max-width: 600px;
+        }
+        
+        .recycle-confirm-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
+            animation: pulse-purple 1.5s infinite;
+        }
+        
+        @keyframes pulse-purple {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+        
+        .restore-modal-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.3);
+            animation: pulse-green 1.5s infinite;
+        }
+        
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        
+        .permanent-delete-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .permanent-delete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+        }
+        
+        .recycle-info-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #0ea5e9;
+            margin-bottom: 20px;
+        }
+        
+        .recycle-warning-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #f59e0b;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -1017,6 +1202,9 @@
                     </button>
                     <button onclick="showSection('finance')" id="tab-finance" class="nav-tab px-6 py-3 rounded-xl bg-red-50 text-red-700 font-semibold">
                         <i class="fas fa-money-bill-wave mr-2"></i>আর্থিক ব্যবস্থাপনা
+                    </button>
+                    <button onclick="showSection('recycle')" id="tab-recycle" class="nav-tab px-6 py-3 rounded-xl recycle-bin-tab font-semibold hidden">
+                        <i class="fas fa-trash-restore mr-2"></i>রিসাইকেল বিন
                     </button>
                 </div>
             </div>
@@ -1279,6 +1467,7 @@
                         <table class="w-full">
                             <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
                                 <tr>
+                                    <th class="p-4 text-left font-semibold text-gray-700">ক্রমিক নং</th>
                                     <th class="p-4 text-left font-semibold text-gray-700">তারিখ</th>
                                     <th class="p-4 text-left font-semibold text-gray-700">শিক্ষক/কর্মচারী</th>
                                     <th class="p-4 text-left font-semibold text-gray-700">পদবী</th>
@@ -1398,6 +1587,7 @@
                         <table class="w-full">
                             <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
                                 <tr>
+                                    <th class="p-4 text-left font-semibold text-gray-700">ক্রমিক নং</th>
                                     <th class="p-4 text-left font-semibold text-gray-700">তারিখ</th>
                                     <th class="p-4 text-left font-semibold text-gray-700">খাত</th>
                                     <th class="p-4 text-left font-semibold text-gray-700">ধরণ</th>
@@ -1409,6 +1599,131 @@
                                 <!-- আর্থিক লেনদেন -->
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- রিসাইকেল বিন সেকশন -->
+            <div id="section-recycle" class="section-content hidden">
+                <div class="glass-card p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-700 mb-4 md:mb-0">
+                            <i class="fas fa-trash-restore recycle-icon mr-2"></i>
+                            রিসাইকেল বিন
+                        </h3>
+                        <div class="flex space-x-2">
+                            <button onclick="emptyRecycleBin()" class="empty-recycle-btn">
+                                <i class="fas fa-trash mr-2"></i>বিন খালি করুন
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- বিন সারাংশ -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bin-stats">
+                            <div class="bin-stat-item">
+                                <span class="bin-stat-label">ছাত্র/ছাত্রী</span>
+                                <span class="bin-stat-value" id="recycleStudentsCount">০</span>
+                            </div>
+                            <div class="bin-stat-item">
+                                <span class="bin-stat-label">শিক্ষক/কর্মচারী</span>
+                                <span class="bin-stat-value" id="recycleTeachersCount">০</span>
+                            </div>
+                            <div class="bin-stat-item">
+                                <span class="bin-stat-label">হাজিরা রেকর্ড</span>
+                                <span class="bin-stat-value" id="recycleAttendanceCount">০</span>
+                            </div>
+                            <div class="bin-stat-item">
+                                <span class="bin-stat-label">লেনদেন</span>
+                                <span class="bin-stat-value" id="recycleTransactionsCount">০</span>
+                            </div>
+                        </div>
+                        <div class="col-span-3">
+                            <div class="bg-gradient-to-r from-purple-50 to-indigo-50 p-6 rounded-xl border border-purple-200">
+                                <h4 class="text-lg font-semibold text-purple-800 mb-3">
+                                    <i class="fas fa-info-circle mr-2"></i>রিসাইকেল বিন তথ্য
+                                </h4>
+                                <p class="text-gray-600 mb-3">
+                                    মুছে ফেলা আইটেমগুলো ৩০ দিন পর্যন্ত এখানে সংরক্ষিত থাকে। আপনি এগুলো পুনরুদ্ধার করতে পারেন বা স্থায়ীভাবে মুছে ফেলতে পারেন।
+                                </p>
+                                <div class="text-sm text-gray-500">
+                                    <i class="fas fa-clock mr-1"></i>
+                                    সর্বশেষ আপডেট: <span id="lastRecycleUpdate">লোড হচ্ছে...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ফিল্টার অপশন -->
+                    <div class="mb-6">
+                        <div class="flex flex-wrap gap-4 items-center">
+                            <select id="recycleFilterType" onchange="filterRecycleBin()" class="p-3 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                                <option value="">সকল প্রকার</option>
+                                <option value="students">ছাত্র/ছাত্রী</option>
+                                <option value="teachers">শিক্ষক/কর্মচারী</option>
+                                <option value="attendance">হাজিরা রেকর্ড</option>
+                                <option value="transactions">লেনদেন</option>
+                            </select>
+                            
+                            <select id="recycleFilterDays" onchange="filterRecycleBin()" class="p-3 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                                <option value="30">সকল সময়ের</option>
+                                <option value="7">গত ৭ দিন</option>
+                                <option value="30">গত ৩০ দিন</option>
+                                <option value="90">গত ৯০ দিন</option>
+                            </select>
+                            
+                            <div class="relative flex-1 min-w-[250px]">
+                                <input type="text" id="recycleSearch" placeholder="মুছে ফেলা আইটেম অনুসন্ধান..." 
+                                       class="p-3 pl-12 border rounded-lg w-full bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                       onkeyup="filterRecycleBin()">
+                                <i class="fas fa-search text-gray-400 absolute left-4 top-3.5"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- রিসাইকেল বিন টেবিল -->
+                    <div class="overflow-x-auto rounded-xl border shadow-sm">
+                        <table class="w-full">
+                            <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+                                <tr>
+                                    <th class="p-4 text-left font-semibold text-gray-700">ক্রমিক নং</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">প্রকার</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">আইটেমের নাম</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">বিস্তারিত</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">মুছে ফেলার তারিখ</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">কারণ</th>
+                                    <th class="p-4 text-left font-semibold text-gray-700">কার্যক্রম</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recycleTableBody">
+                                <!-- রিসাইকেল বিন আইটেম -->
+                                <tr id="emptyRecycle">
+                                    <td colspan="7" class="p-8 text-center text-gray-500">
+                                        <i class="fas fa-trash-alt text-4xl mb-3"></i>
+                                        <p class="text-lg font-medium">রিসাইকেল বিন খালি</p>
+                                        <p class="text-sm mt-2">কোন মুছে ফেলা আইটেম পাওয়া যায়নি</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- প্যাজিনেশন -->
+                    <div class="flex justify-between items-center mt-6">
+                        <div class="text-sm text-gray-600">
+                            মোট <span id="totalRecycleItems">০</span>টি আইটেম
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="prevRecyclePage()" class="px-4 py-2 border rounded-lg hover:bg-gray-50 transition duration-200">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span class="px-4 py-2 bg-purple-100 text-purple-800 rounded-lg font-medium">
+                                পৃষ্ঠা <span id="currentRecyclePage">1</span>/<span id="totalRecyclePages">1</span>
+                            </span>
+                            <button onclick="nextRecyclePage()" class="px-4 py-2 border rounded-lg hover:bg-gray-50 transition duration-200">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1483,7 +1798,7 @@
                     <i class="fas fa-exclamation-triangle"></i>
                 </div>
                 <h3 class="delete-confirm-title" id="deleteTitle">আপনি কি নিশ্চিত?</h3>
-                <p class="delete-confirm-subtitle" id="deleteSubtitle">এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না</p>
+                <p class="delete-confirm-subtitle" id="deleteSubtitle">এই তথ্যটি রিসাইকেল বিনে স্থানান্তরিত হবে</p>
                 
                 <div class="delete-item-details">
                     <div class="delete-item-title">
@@ -1501,7 +1816,7 @@
                         সতর্কতা
                     </div>
                     <div class="delete-warning-text" id="deleteWarning">
-                        এই তথ্যটি স্থায়ীভাবে মুছে যাবে এবং পুনরুদ্ধার করা যাবে না। দয়া করে নিশ্চিত করুন যে আপনি সঠিক তথ্য মুছতে চান।
+                        এই তথ্যটি রিসাইকেল বিনে স্থানান্তরিত হবে এবং ৩০ দিন পর্যন্ত সেখানে সংরক্ষিত থাকবে। প্রয়োজনে আপনি পুনরুদ্ধার করতে পারবেন।
                     </div>
                 </div>
                 
@@ -1510,7 +1825,111 @@
                         <i class="fas fa-times mr-2"></i>বাতিল
                     </button>
                     <button onclick="confirmDelete()" class="delete-confirm-btn delete-confirm-btn-confirm">
-                        <i class="fas fa-trash-alt mr-2"></i>মুছে ফেলুন
+                        <i class="fas fa-trash-alt mr-2"></i>রিসাইকেল বিনে পাঠান
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- রিসাইকেল বিন থেকে পুনরুদ্ধার মডেল -->
+    <div id="restoreConfirmModal" class="modal-overlay hidden">
+        <div class="modal-content recycle-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-trash-restore"></i>
+                    পুনরুদ্ধার কনফার্মেশন
+                </h3>
+                <button onclick="hideModal('restoreConfirmModal')" class="close-button">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="text-center">
+                <div class="restore-modal-icon">
+                    <i class="fas fa-trash-restore"></i>
+                </div>
+                <h3 class="delete-confirm-title" id="restoreTitle">আইটেম পুনরুদ্ধার করুন?</h3>
+                <p class="delete-confirm-subtitle" id="restoreSubtitle">এই আইটেমটি মূল ডেটাবেসে ফিরিয়ে আনা হবে</p>
+                
+                <div class="recycle-info-card">
+                    <div class="delete-item-title">
+                        <i class="fas fa-info-circle"></i>
+                        পুনরুদ্ধার তথ্য
+                    </div>
+                    <div class="delete-item-info" id="restoreItemDetails">
+                        <!-- পুনরুদ্ধার আইটেমের তথ্য -->
+                    </div>
+                </div>
+                
+                <div class="recycle-warning-card">
+                    <div class="delete-warning-title">
+                        <i class="fas fa-exclamation-circle"></i>
+                        সতর্কতা
+                    </div>
+                    <div class="delete-warning-text" id="restoreWarning">
+                        এই আইটেমটি রিসাইকেল বিন থেকে মূল ডেটাবেসে স্থানান্তরিত হবে এবং রিসাইকেল বিন থেকে মুছে যাবে।
+                    </div>
+                </div>
+                
+                <div class="delete-buttons">
+                    <button onclick="hideModal('restoreConfirmModal')" class="delete-confirm-btn delete-confirm-btn-cancel">
+                        <i class="fas fa-times mr-2"></i>বাতিল
+                    </button>
+                    <button onclick="confirmRestore()" class="delete-confirm-btn delete-confirm-btn-confirm" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                        <i class="fas fa-trash-restore mr-2"></i>পুনরুদ্ধার করুন
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- স্থায়ীভাবে মুছে ফেলা মডেল -->
+    <div id="permanentDeleteModal" class="modal-overlay hidden">
+        <div class="modal-content recycle-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-skull-crossbones"></i>
+                    স্থায়ী মুছে ফেলা
+                </h3>
+                <button onclick="hideModal('permanentDeleteModal')" class="close-button">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="text-center">
+                <div class="delete-confirm-icon">
+                    <i class="fas fa-skull-crossbones"></i>
+                </div>
+                <h3 class="delete-confirm-title" id="permanentDeleteTitle">স্থায়ীভাবে মুছে ফেলুন?</h3>
+                <p class="delete-confirm-subtitle" id="permanentDeleteSubtitle">এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না!</p>
+                
+                <div class="delete-item-details">
+                    <div class="delete-item-title">
+                        <i class="fas fa-info-circle"></i>
+                        মুছে ফেলার তথ্য
+                    </div>
+                    <div class="delete-item-info" id="permanentDeleteItemDetails">
+                        <!-- স্থায়ী ডিলিট আইটেমের তথ্য -->
+                    </div>
+                </div>
+                
+                <div class="delete-warning">
+                    <div class="delete-warning-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        গুরুত্বপূর্ণ সতর্কতা
+                    </div>
+                    <div class="delete-warning-text" id="permanentDeleteWarning">
+                        এই আইটেমটি স্থায়ীভাবে মুছে যাবে এবং কোনভাবেই পুনরুদ্ধার করা যাবে না। এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না!
+                    </div>
+                </div>
+                
+                <div class="delete-buttons">
+                    <button onclick="hideModal('permanentDeleteModal')" class="delete-confirm-btn delete-confirm-btn-cancel">
+                        <i class="fas fa-times mr-2"></i>বাতিল
+                    </button>
+                    <button onclick="confirmPermanentDelete()" class="delete-confirm-btn delete-confirm-btn-confirm">
+                        <i class="fas fa-skull-crossbones mr-2"></i>স্থায়ীভাবে মুছে ফেলুন
                     </button>
                 </div>
             </div>
@@ -1907,6 +2326,7 @@
         let teachers = [];
         let transactions = [];
         let attendanceRecords = [];
+        let recycleBinItems = [];
         let currentUser = null;
         let currentStudentEditId = null;
         let currentTeacherEditId = null;
@@ -1917,6 +2337,15 @@
         let deleteType = null;
         let deleteId = null;
         let deleteItemData = null;
+        
+        // রিসাইকেল বিন ভেরিয়েবল
+        let currentRecyclePage = 1;
+        const recyclePageSize = 10;
+        let filteredRecycleItems = [];
+        
+        // রিসাইকেল বিন অপারেশন ভেরিয়েবল
+        let restoreRecycleId = null;
+        let permanentDeleteRecycleId = null;
 
         // বাংলা সংখ্যা কনভার্টার
         const banglaNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
@@ -2039,11 +2468,23 @@
                 addTeacherBtn.classList.remove('hidden');
                 addAttendanceBtn.classList.remove('hidden');
                 financeForm.classList.remove('hidden');
+                
+                // রিসাইকেল বিন ট্যাব দেখাও
+                const recycleTab = document.getElementById('tab-recycle');
+                if (recycleTab) {
+                    recycleTab.classList.remove('hidden');
+                }
             } else {
                 addStudentBtn.classList.add('hidden');
                 addTeacherBtn.classList.add('hidden');
                 addAttendanceBtn.classList.add('hidden');
                 financeForm.classList.add('hidden');
+                
+                // রিসাইকেল বিন ট্যাব লুকাও
+                const recycleTab = document.getElementById('tab-recycle');
+                if (recycleTab) {
+                    recycleTab.classList.add('hidden');
+                }
             }
         }
 
@@ -2091,6 +2532,17 @@
                 loadAttendanceTable();
                 updateAttendanceSummary();
                 updateSyncStatus('হাজিরা ডেটা সিঙ্ক হয়েছে');
+            });
+            
+            // রিসাইকেল বিন ডেটা
+            database.ref('madrasa_18752/recycle_bin').on('value', (snapshot) => {
+                recycleBinItems = [];
+                snapshot.forEach((childSnapshot) => {
+                    recycleBinItems.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                updateRecycleBinSummary();
+                filterRecycleBin();
+                updateSyncStatus('রিসাইকেল বিন আপডেট হয়েছে');
             });
         }
 
@@ -2150,7 +2602,411 @@
                 });
         }
 
-        // উন্নত ডিলিট কনফার্মেশন শো করা
+        // রিসাইকেল বিনে আইটেম যোগ
+        function addToRecycleBin(itemType, itemId, itemData, deletedBy, reason = 'ম্যানুয়ালি মুছে ফেলা হয়েছে') {
+            const recycleData = {
+                itemType: itemType,
+                originalId: itemId, // আসল আইডি সংরক্ষণ
+                itemData: itemData,
+                deletedBy: deletedBy,
+                deletedAt: new Date().toISOString(),
+                reason: reason,
+                canRestore: true
+            };
+            
+            return database.ref('madrasa_18752/recycle_bin').push(recycleData)
+                .then(() => {
+                    console.log(`${itemType} রিসাইকেল বিনে যোগ হয়েছে`);
+                    return true;
+                })
+                .catch(error => {
+                    console.error('রিসাইকেল বিনে যোগ করার সময় ত্রুটি:', error);
+                    return false;
+                });
+        }
+
+        // রিসাইকেল বিন থেকে আইটেম মুছে ফেলা
+        function deleteFromRecycleBin(recycleId) {
+            return database.ref(`madrasa_18752/recycle_bin/${recycleId}`).remove()
+                .then(() => {
+                    console.log('আইটেম রিসাইকেল বিন থেকে মুছে ফেলা হয়েছে');
+                    return true;
+                })
+                .catch(error => {
+                    console.error('রিসাইকেল বিন থেকে মুছে ফেলার সময় ত্রুটি:', error);
+                    return false;
+                });
+        }
+
+        // রিসাইকেল বিন সারাংশ আপডেট
+        function updateRecycleBinSummary() {
+            const studentsCount = recycleBinItems.filter(item => item.itemType === 'students').length;
+            const teachersCount = recycleBinItems.filter(item => item.itemType === 'teachers').length;
+            const attendanceCount = recycleBinItems.filter(item => item.itemType === 'attendance').length;
+            const transactionsCount = recycleBinItems.filter(item => item.itemType === 'transactions').length;
+            
+            document.getElementById('recycleStudentsCount').textContent = toBanglaNumber(studentsCount);
+            document.getElementById('recycleTeachersCount').textContent = toBanglaNumber(teachersCount);
+            document.getElementById('recycleAttendanceCount').textContent = toBanglaNumber(attendanceCount);
+            document.getElementById('recycleTransactionsCount').textContent = toBanglaNumber(transactionsCount);
+            
+            // সর্বশেষ আপডেট তারিখ
+            if (recycleBinItems.length > 0) {
+                const latestItem = recycleBinItems.reduce((latest, current) => {
+                    return new Date(current.deletedAt) > new Date(latest.deletedAt) ? current : latest;
+                });
+                
+                const latestDate = new Date(latestItem.deletedAt);
+                const banglaDate = `${toBanglaNumber(latestDate.getDate())} ${banglaMonths[latestDate.getMonth()]} ${toBanglaNumber(latestDate.getFullYear())}`;
+                document.getElementById('lastRecycleUpdate').textContent = banglaDate;
+            } else {
+                document.getElementById('lastRecycleUpdate').textContent = 'কোন ডেটা নেই';
+            }
+        }
+
+        // রিসাইকেল বিন ফিল্টার
+        function filterRecycleBin() {
+            const filterType = document.getElementById('recycleFilterType').value;
+            const filterDays = parseInt(document.getElementById('recycleFilterDays').value);
+            const searchTerm = document.getElementById('recycleSearch').value.toLowerCase();
+            
+            let filtered = recycleBinItems;
+            
+            // প্রকার দ্বারা ফিল্টার
+            if (filterType) {
+                filtered = filtered.filter(item => item.itemType === filterType);
+            }
+            
+            // দিন দ্বারা ফিল্টার
+            if (filterDays) {
+                const cutoffDate = new Date();
+                cutoffDate.setDate(cutoffDate.getDate() - filterDays);
+                filtered = filtered.filter(item => new Date(item.deletedAt) >= cutoffDate);
+            }
+            
+            // সার্চ টার্ম দ্বারা ফিল্টার
+            if (searchTerm) {
+                filtered = filtered.filter(item => {
+                    const itemName = getItemName(item);
+                    const itemDetails = getItemDetails(item);
+                    return itemName.toLowerCase().includes(searchTerm) || 
+                           itemDetails.toLowerCase().includes(searchTerm) ||
+                           item.reason.toLowerCase().includes(searchTerm);
+                });
+            }
+            
+            // তারিখ অনুসারে সাজানো (নতুন থেকে পুরাতন)
+            filtered.sort((a, b) => new Date(b.deletedAt) - new Date(a.deletedAt));
+            
+            filteredRecycleItems = filtered;
+            currentRecyclePage = 1;
+            loadRecycleBinTable();
+        }
+
+        function getItemName(item) {
+            switch(item.itemType) {
+                case 'students':
+                    return item.itemData.name || 'নাম জানা নেই';
+                case 'teachers':
+                    return item.itemData.name || 'নাম জানা নেই';
+                case 'attendance':
+                    const teacher = teachers.find(t => t.id === item.itemData.teacherId);
+                    return teacher ? teacher.name : 'হাজিরা রেকর্ড';
+                case 'transactions':
+                    return item.itemData.desc || 'লেনদেন';
+                default:
+                    return 'আইটেম';
+            }
+        }
+
+        function getItemDetails(item) {
+            switch(item.itemType) {
+                case 'students':
+                    return `শ্রেণি: ${item.itemData.class || 'N/A'}ম, রোল: ${item.itemData.roll || 'N/A'}`;
+                case 'teachers':
+                    return `পদবী: ${item.itemData.designation || 'N/A'}, বেতন: ৳${item.itemData.salary || 'N/A'}`;
+                case 'attendance':
+                    const date = new Date(item.itemData.date);
+                    const banglaDate = `${toBanglaNumber(date.getDate())} ${banglaMonths[date.getMonth()]}`;
+                    return `তারিখ: ${banglaDate}, অবস্থা: ${getStatusText(item.itemData.status || '')}`;
+                case 'transactions':
+                    return `পরিমাণ: ৳${item.itemData.amount || 'N/A'}, ধরন: ${item.itemData.type === 'income' ? 'আয়' : 'ব্যয়'}`;
+                default:
+                    return '';
+            }
+        }
+
+        // রিসাইকেল বিন টেবিল লোড
+        function loadRecycleBinTable() {
+            const tbody = document.getElementById('recycleTableBody');
+            const emptyRecycle = document.getElementById('emptyRecycle');
+            
+            if (filteredRecycleItems.length === 0) {
+                tbody.innerHTML = '';
+                tbody.appendChild(emptyRecycle);
+                emptyRecycle.classList.remove('hidden');
+                return;
+            }
+            
+            emptyRecycle.classList.add('hidden');
+            
+            // প্যাজিনেশন ক্যালকুলেশন
+            const totalPages = Math.ceil(filteredRecycleItems.length / recyclePageSize);
+            const startIndex = (currentRecyclePage - 1) * recyclePageSize;
+            const endIndex = Math.min(startIndex + recyclePageSize, filteredRecycleItems.length);
+            const pageItems = filteredRecycleItems.slice(startIndex, endIndex);
+            
+            // টেবিল HTML জেনারেট
+            tbody.innerHTML = pageItems.map((item, index) => {
+                const itemName = getItemName(item);
+                const itemDetails = getItemDetails(item);
+                const deletedDate = new Date(item.deletedAt);
+                const banglaDeletedDate = `${toBanglaNumber(deletedDate.getDate())} ${banglaMonths[deletedDate.getMonth()]} ${toBanglaNumber(deletedDate.getFullYear())}`;
+                const serialNumber = startIndex + index + 1;
+                
+                let typeBadge = '';
+                switch(item.itemType) {
+                    case 'students':
+                        typeBadge = '<span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">ছাত্র/ছাত্রী</span>';
+                        break;
+                    case 'teachers':
+                        typeBadge = '<span class="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium">শিক্ষক/কর্মচারী</span>';
+                        break;
+                    case 'attendance':
+                        typeBadge = '<span class="px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-medium">হাজিরা</span>';
+                        break;
+                    case 'transactions':
+                        typeBadge = '<span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">লেনদেন</span>';
+                        break;
+                }
+                
+                return `
+                    <tr class="border-b hover:bg-gray-50 transition duration-200 deleted-item">
+                        <td class="p-4">
+                            <div class="index-badge">${toBanglaNumber(serialNumber)}</div>
+                        </td>
+                        <td class="p-4">
+                            ${typeBadge}
+                        </td>
+                        <td class="p-4 font-medium text-gray-800">${itemName}</td>
+                        <td class="p-4 text-gray-700 text-sm">${itemDetails}</td>
+                        <td class="p-4 text-gray-600">
+                            <div>${banglaDeletedDate}</div>
+                            <div class="deleted-date">${deletedDate.toLocaleTimeString('bn-BD')}</div>
+                        </td>
+                        <td class="p-4 text-gray-700">${item.reason}</td>
+                        <td class="p-4">
+                            <div class="action-buttons">
+                                <button onclick="showRestoreConfirmation('${item.id}')" class="restore-btn" title="পুনরুদ্ধার করুন">
+                                    <i class="fas fa-trash-restore"></i>
+                                    পুনরুদ্ধার
+                                </button>
+                                <button onclick="showPermanentDeleteConfirmation('${item.id}')" class="permanent-delete-btn" title="স্থায়ীভাবে মুছে ফেলুন">
+                                    <i class="fas fa-skull-crossbones"></i>
+                                    স্থায়ী ডিলিট
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            // প্যাজিনেশন আপডেট
+            document.getElementById('totalRecycleItems').textContent = toBanglaNumber(filteredRecycleItems.length);
+            document.getElementById('currentRecyclePage').textContent = toBanglaNumber(currentRecyclePage);
+            document.getElementById('totalRecyclePages').textContent = toBanglaNumber(totalPages);
+            
+            // প্যাজিনেশন বাটন স্টেট
+            const prevBtn = document.querySelector('button[onclick="prevRecyclePage()"]');
+            const nextBtn = document.querySelector('button[onclick="nextRecyclePage()"]');
+            if (prevBtn) prevBtn.disabled = currentRecyclePage === 1;
+            if (nextBtn) nextBtn.disabled = currentRecyclePage === totalPages;
+        }
+
+        // পুনরুদ্ধার কনফার্মেশন দেখাও
+        function showRestoreConfirmation(recycleId) {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন আইটেম পুনরুদ্ধার করতে পারেন!', 'error');
+                return;
+            }
+            
+            const recycleItem = recycleBinItems.find(item => item.id === recycleId);
+            if (!recycleItem) {
+                showNotification('আইটেম পাওয়া যায়নি!', 'error');
+                return;
+            }
+            
+            restoreRecycleId = recycleId;
+            
+            const restoreTitle = document.getElementById('restoreTitle');
+            const restoreSubtitle = document.getElementById('restoreSubtitle');
+            const restoreItemDetails = document.getElementById('restoreItemDetails');
+            const restoreWarning = document.getElementById('restoreWarning');
+            
+            const itemName = getItemName(recycleItem);
+            const itemDetails = getItemDetails(recycleItem);
+            
+            restoreTitle.textContent = `${itemName} পুনরুদ্ধার করুন?`;
+            restoreSubtitle.textContent = 'এই আইটেমটি মূল ডেটাবেসে ফিরিয়ে আনা হবে';
+            restoreItemDetails.innerHTML = `
+                <strong>আইটেম:</strong> ${itemName}<br>
+                <strong>বিস্তারিত:</strong> ${itemDetails}<br>
+                <strong>মুছে ফেলা হয়েছে:</strong> ${new Date(recycleItem.deletedAt).toLocaleDateString('bn-BD')}<br>
+                <strong>মুছে ফেলেছেন:</strong> ${recycleItem.deletedBy}
+            `;
+            restoreWarning.textContent = 'এই আইটেমটি রিসাইকেল বিন থেকে মূল ডেটাবেসে স্থানান্তরিত হবে এবং রিসাইকেল বিন থেকে মুছে যাবে।';
+            
+            document.getElementById('restoreConfirmModal').classList.remove('hidden');
+        }
+
+        // স্থায়ীভাবে মুছে ফেলার কনফার্মেশন দেখাও
+        function showPermanentDeleteConfirmation(recycleId) {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন স্থায়ীভাবে মুছে ফেলতে পারেন!', 'error');
+                return;
+            }
+            
+            const recycleItem = recycleBinItems.find(item => item.id === recycleId);
+            if (!recycleItem) {
+                showNotification('আইটেম পাওয়া যায়নি!', 'error');
+                return;
+            }
+            
+            permanentDeleteRecycleId = recycleId;
+            
+            const permanentDeleteTitle = document.getElementById('permanentDeleteTitle');
+            const permanentDeleteSubtitle = document.getElementById('permanentDeleteSubtitle');
+            const permanentDeleteItemDetails = document.getElementById('permanentDeleteItemDetails');
+            const permanentDeleteWarning = document.getElementById('permanentDeleteWarning');
+            
+            const itemName = getItemName(recycleItem);
+            const itemDetails = getItemDetails(recycleItem);
+            
+            permanentDeleteTitle.textContent = `${itemName} স্থায়ীভাবে মুছে ফেলুন?`;
+            permanentDeleteSubtitle.textContent = 'এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না!';
+            permanentDeleteItemDetails.innerHTML = `
+                <strong>আইটেম:</strong> ${itemName}<br>
+                <strong>বিস্তারিত:</strong> ${itemDetails}<br>
+                <strong>মুছে ফেলা হয়েছে:</strong> ${new Date(recycleItem.deletedAt).toLocaleDateString('bn-BD')}<br>
+                <strong>মুছে ফেলেছেন:</strong> ${recycleItem.deletedBy}<br>
+                <strong>কারণ:</strong> ${recycleItem.reason}
+            `;
+            permanentDeleteWarning.textContent = 'এই আইটেমটি স্থায়ীভাবে মুছে যাবে এবং কোনভাবেই পুনরুদ্ধার করা যাবে না। এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না!';
+            
+            document.getElementById('permanentDeleteModal').classList.remove('hidden');
+        }
+
+        // পুনরুদ্ধার ফাংশন
+        function confirmRestore() {
+            if (!restoreRecycleId) {
+                hideModal('restoreConfirmModal');
+                return;
+            }
+            
+            const recycleItem = recycleBinItems.find(item => item.id === restoreRecycleId);
+            if (!recycleItem) {
+                showNotification('আইটেম পাওয়া যায়নি!', 'error');
+                hideModal('restoreConfirmModal');
+                return;
+            }
+            
+            // রিসাইকেল বিন থেকে মুছে ফেলার আগে মূল ডেটাবেসে পুনরুদ্ধার
+            saveToFirebase(recycleItem.itemType, recycleItem.itemData, recycleItem.originalId)
+                .then(success => {
+                    if (success) {
+                        // রিসাইকেল বিন থেকে মুছে ফেলো
+                        return deleteFromRecycleBin(restoreRecycleId);
+                    }
+                    return Promise.reject('পুনরুদ্ধার ব্যর্থ');
+                })
+                .then(() => {
+                    showNotification('আইটেম সফলভাবে পুনরুদ্ধার করা হয়েছে!', 'success');
+                    hideModal('restoreConfirmModal');
+                    restoreRecycleId = null;
+                    
+                    // ডেটা রিলোড করো
+                    setTimeout(() => {
+                        loadDataFromFirebase();
+                    }, 500);
+                })
+                .catch(error => {
+                    showNotification('পুনরুদ্ধার করতে সমস্যা হয়েছে!', 'error');
+                    console.error('রিস্টোর এরর:', error);
+                });
+        }
+
+        // স্থায়ীভাবে মুছে ফেলা
+        function confirmPermanentDelete() {
+            if (!permanentDeleteRecycleId) {
+                hideModal('permanentDeleteModal');
+                return;
+            }
+            
+            // রিসাইকেল বিন থেকে মুছে ফেলো
+            deleteFromRecycleBin(permanentDeleteRecycleId)
+                .then(() => {
+                    showNotification('আইটেম স্থায়ীভাবে মুছে ফেলা হয়েছে!', 'success');
+                    hideModal('permanentDeleteModal');
+                    permanentDeleteRecycleId = null;
+                    
+                    // রিসাইকেল বিন রিফ্রেশ
+                    setTimeout(() => {
+                        filterRecycleBin();
+                    }, 500);
+                })
+                .catch(error => {
+                    showNotification('মুছে ফেলতে সমস্যা হয়েছে!', 'error');
+                });
+        }
+
+        // রিসাইকেল বিন খালি করুন
+        function emptyRecycleBin() {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন রিসাইকেল বিন খালি করতে পারেন!', 'error');
+                return;
+            }
+            
+            if (recycleBinItems.length === 0) {
+                showNotification('রিসাইকেল বিন ইতিমধ্যেই খালি!', 'info');
+                return;
+            }
+            
+            // কনফার্মেশন
+            if (!confirm(`আপনি কি রিসাইকেল বিন সম্পূর্ণ খালি করতে চান?\n\nমোট ${recycleBinItems.length}টি আইটেম স্থায়ীভাবে মুছে যাবে!\n\nএই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না!`)) {
+                return;
+            }
+            
+            // সব আইটেম মুছে ফেলো
+            database.ref('madrasa_18752/recycle_bin').remove()
+                .then(() => {
+                    showNotification('রিসাইকেল বিন সফলভাবে খালি করা হয়েছে!', 'success');
+                    recycleBinItems = [];
+                    filteredRecycleItems = [];
+                    loadRecycleBinTable();
+                    updateRecycleBinSummary();
+                })
+                .catch(error => {
+                    showNotification('রিসাইকেল বিন খালি করতে সমস্যা হয়েছে!', 'error');
+                });
+        }
+
+        // প্যাজিনেশন ফাংশন
+        function nextRecyclePage() {
+            const totalPages = Math.ceil(filteredRecycleItems.length / recyclePageSize);
+            if (currentRecyclePage < totalPages) {
+                currentRecyclePage++;
+                loadRecycleBinTable();
+            }
+        }
+
+        function prevRecyclePage() {
+            if (currentRecyclePage > 1) {
+                currentRecyclePage--;
+                loadRecycleBinTable();
+            }
+        }
+
+        // উন্নত ডিলিট কনফার্মেশন শো করা (রিসাইকেল বিনে পাঠানো সহ)
         function showDeleteConfirmation(type, id, itemData) {
             if (!currentUser || currentUser.role !== 'admin') {
                 showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
@@ -2173,7 +3029,7 @@
             switch(type) {
                 case 'students':
                     deleteTitle.textContent = 'ছাত্র/ছাত্রী মুছে ফেলুন?';
-                    deleteSubtitle.textContent = 'এই ছাত্র/ছাত্রীর সকল তথ্য স্থায়ীভাবে মুছে যাবে';
+                    deleteSubtitle.textContent = 'এই ছাত্র/ছাত্রীর সকল তথ্য রিসাইকেল বিনে স্থানান্তরিত হবে';
                     itemName = itemData.name || 'নাম জানা নেই';
                     itemDetails = `
                         <strong>নাম:</strong> ${itemName}<br>
@@ -2181,12 +3037,12 @@
                         <strong>রোল নং:</strong> ${itemData.roll}<br>
                         <strong>আইডি নং:</strong> ${itemData.studentIdNumber || 'N/A'}
                     `;
-                    warningText = 'এই ছাত্র/ছাত্রীর সকল শিক্ষণীয় তথ্য, হাজিরা রেকর্ড এবং অন্যান্য ডেটা মুছে যাবে।';
+                    warningText = 'এই ছাত্র/ছাত্রী রিসাইকেল বিনে স্থানান্তরিত হবে এবং ৩০ দিন পর্যন্ত সেখানে সংরক্ষিত থাকবে। প্রয়োজনে আপনি পুনরুদ্ধার করতে পারবেন।';
                     break;
                     
                 case 'teachers':
                     deleteTitle.textContent = 'শিক্ষক/কর্মচারী মুছে ফেলুন?';
-                    deleteSubtitle.textContent = 'এই শিক্ষক/কর্মচারীর সকল তথ্য স্থায়ীভাবে মুছে যাবে';
+                    deleteSubtitle.textContent = 'এই শিক্ষক/কর্মচারীর সকল তথ্য রিসাইকেল বিনে স্থানান্তরিত হবে';
                     itemName = itemData.name || 'নাম জানা নেই';
                     itemDetails = `
                         <strong>নাম:</strong> ${itemName}<br>
@@ -2194,12 +3050,12 @@
                         <strong>ইনডেক্স নং:</strong> ${itemData.teacherId}<br>
                         <strong>বেতন:</strong> ৳ ${itemData.salary ? itemData.salary.toLocaleString('bn-BD') : 'N/A'}
                     `;
-                    warningText = 'এই শিক্ষক/কর্মচারীর সকল হাজিরা রেকর্ড, বেতন তথ্য এবং অন্যান্য ডেটা মুছে যাবে।';
+                    warningText = 'এই শিক্ষক/কর্মচারী রিসাইকেল বিনে স্থানান্তরিত হবে এবং ৩০ দিন পর্যন্ত সেখানে সংরক্ষিত থাকবে। প্রয়োজনে আপনি পুনরুদ্ধার করতে পারবেন।';
                     break;
                     
                 case 'attendance':
                     deleteTitle.textContent = 'হাজিরা রেকর্ড মুছে ফেলুন?';
-                    deleteSubtitle.textContent = 'এই হাজিরা রেকর্ড স্থায়ীভাবে মুছে যাবে';
+                    deleteSubtitle.textContent = 'এই হাজিরা রেকর্ড রিসাইকেল বিনে স্থানান্তরিত হবে';
                     const teacher = teachers.find(t => t.id === itemData.teacherId) || {};
                     const date = new Date(itemData.date);
                     const banglaDate = `${toBanglaNumber(date.getDate())} ${banglaMonths[date.getMonth()]} ${toBanglaNumber(date.getFullYear())}`;
@@ -2209,12 +3065,12 @@
                         <strong>হাজিরার অবস্থা:</strong> ${getStatusText(itemData.status)}<br>
                         <strong>সময়:</strong> ${itemData.inTime || 'N/A'} - ${itemData.outTime || 'N/A'}
                     `;
-                    warningText = 'এই হাজিরা রেকর্ড মুছে ফেলা হলে শিক্ষকের মাসিক হাজিরা সারাংশ আপডেট হবে।';
+                    warningText = 'এই হাজিরা রেকর্ড রিসাইকেল বিনে স্থানান্তরিত হবে এবং ৩০ দিন পর্যন্ত সেখানে সংরক্ষিত থাকবে। প্রয়োজনে আপনি পুনরুদ্ধার করতে পারবেন।';
                     break;
                     
                 case 'transactions':
                     deleteTitle.textContent = 'লেনদেন মুছে ফেলুন?';
-                    deleteSubtitle.textContent = 'এই লেনদেন রেকর্ড স্থায়ীভাবে মুছে যাবে';
+                    deleteSubtitle.textContent = 'এই লেনদেন রেকর্ড রিসাইকেল বিনে স্থানান্তরিত হবে';
                     const transDate = new Date(itemData.date);
                     const transBanglaDate = `${toBanglaNumber(transDate.getDate())} ${banglaMonths[transDate.getMonth()]} ${toBanglaNumber(transDate.getFullYear())}`;
                     itemDetails = `
@@ -2223,7 +3079,7 @@
                         <strong>ধরণ:</strong> ${itemData.type === 'income' ? 'আয়' : 'ব্যয়'}<br>
                         <strong>পরিমাণ:</strong> ৳ ${itemData.amount ? itemData.amount.toLocaleString('bn-BD') : 'N/A'}
                     `;
-                    warningText = 'এই লেনদেন রেকর্ড মুছে ফেলা হলে মোট আয়/ব্যয়ের হিসাব পুনরায় গণনা করা হবে।';
+                    warningText = 'এই লেনদেন রেকর্ড রিসাইকেল বিনে স্থানান্তরিত হবে এবং ৩০ দিন পর্যন্ত সেখানে সংরক্ষিত থাকবে। প্রয়োজনে আপনি পুনরুদ্ধার করতে পারবেন।';
                     break;
             }
             
@@ -2244,18 +3100,45 @@
             return statusMap[status] || status;
         }
 
-        // ডিলিট কনফার্মেশন
+        // ডিলিট কনফার্মেশন (রিসাইকেল বিনে পাঠানো)
         function confirmDelete() {
             if (!deleteType || !deleteId) {
                 hideModal('deleteConfirmModal');
                 return;
             }
             
-            deleteFromFirebase(deleteType, deleteId)
+            const userEmail = currentUser ? currentUser.email : 'Unknown';
+            
+            // প্রথমে রিসাইকেল বিনে যোগ করো
+            addToRecycleBin(deleteType, deleteId, deleteItemData, userEmail, 'ম্যানুয়ালি মুছে ফেলা হয়েছে')
+                .then(() => {
+                    // তারপর মূল ডেটা মুছো
+                    return deleteFromFirebase(deleteType, deleteId);
+                })
                 .then(success => {
                     if (success) {
-                        showNotification(`${getDeleteTypeText(deleteType)} সফলভাবে মুছে ফেলা হয়েছে!`, 'success');
+                        showNotification(`${getDeleteTypeText(deleteType)} সফলভাবে রিসাইকেল বিনে স্থানান্তরিত হয়েছে!`, 'success');
+                        
+                        // ডেটা রিলোড করো
+                        setTimeout(() => {
+                            if (deleteType === 'students') {
+                                loadStudents();
+                            } else if (deleteType === 'teachers') {
+                                loadTeachers();
+                            } else if (deleteType === 'attendance') {
+                                loadAttendanceTable();
+                            } else if (deleteType === 'transactions') {
+                                loadFinancialData();
+                            }
+                            updateDashboard();
+                        }, 500);
+                    } else {
+                        showNotification('ডিলিট করতে সমস্যা হয়েছে!', 'error');
                     }
+                })
+                .catch(error => {
+                    showNotification('ডিলিট করতে সমস্যা হয়েছে!', 'error');
+                    console.error('ডিলিট এরর:', error);
                 });
             
             hideModal('deleteConfirmModal');
@@ -2456,6 +3339,11 @@
             if (tab) {
                 tab.classList.add('active');
             }
+            
+            // রিসাইকেল বিন সেকশনে আসলে ফিল্টার আপডেট করো
+            if (sectionId === 'recycle') {
+                filterRecycleBin();
+            }
         }
 
         // পাসওয়ার্ড টগল
@@ -2483,183 +3371,6 @@
         }
 
         // মডেল কন্ট্রোল
-        function showAddStudentModal() {
-            if (!currentUser || currentUser.role !== 'admin') {
-                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
-                return;
-            }
-            document.getElementById('addStudentModal').classList.remove('hidden');
-            currentStudentEditId = null;
-            resetStudentForm();
-            document.getElementById('studentModalTitle').textContent = 'নতুন ছাত্র/ছাত্রী যোগ করুন';
-        }
-
-        function showEditStudentModal(studentId) {
-            if (!currentUser || currentUser.role !== 'admin') {
-                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
-                return;
-            }
-            
-            const student = students.find(s => s.id === studentId);
-            if (student) {
-                currentStudentEditId = studentId;
-                
-                document.getElementById('studentName').value = student.name;
-                document.getElementById('studentRoll').value = student.roll;
-                document.getElementById('studentClass').value = student.class;
-                document.getElementById('studentGender').value = student.gender;
-                document.getElementById('studentFather').value = student.fatherName;
-                document.getElementById('studentMother').value = student.motherName;
-                document.getElementById('studentIdNumber').value = student.studentIdNumber || '';
-                document.getElementById('studentMobile').value = student.mobile;
-                document.getElementById('studentEmail').value = student.email;
-                document.getElementById('studentVillage').value = student.village;
-                document.getElementById('studentUpazila').value = student.upazila;
-                document.getElementById('studentDistrict').value = student.district;
-                document.getElementById('studentAdmissionDate').value = student.admissionDate;
-                
-                document.getElementById('studentModalTitle').textContent = 'ছাত্র/ছাত্রী তথ্য এডিট করুন';
-                document.getElementById('addStudentModal').classList.remove('hidden');
-            }
-        }
-
-        function resetStudentForm() {
-            document.getElementById('studentName').value = '';
-            document.getElementById('studentRoll').value = '';
-            document.getElementById('studentClass').value = '';
-            document.getElementById('studentGender').value = '';
-            document.getElementById('studentFather').value = '';
-            document.getElementById('studentMother').value = '';
-            document.getElementById('studentIdNumber').value = '';
-            document.getElementById('studentMobile').value = '';
-            document.getElementById('studentEmail').value = '';
-            document.getElementById('studentVillage').value = '';
-            document.getElementById('studentUpazila').value = '';
-            document.getElementById('studentDistrict').value = '';
-            document.getElementById('studentAdmissionDate').value = new Date().toISOString().split('T')[0];
-        }
-
-        function showAddTeacherModal() {
-            if (!currentUser || currentUser.role !== 'admin') {
-                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
-                return;
-            }
-            document.getElementById('addTeacherModal').classList.remove('hidden');
-            currentTeacherEditId = null;
-            resetTeacherForm();
-            document.getElementById('teacherModalTitle').textContent = 'নতুন শিক্ষক/কর্মচারী যোগ করুন';
-        }
-
-        function showEditTeacherModal(teacherId) {
-            if (!currentUser || currentUser.role !== 'admin') {
-                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
-                return;
-            }
-            
-            const teacher = teachers.find(t => t.id === teacherId);
-            if (teacher) {
-                currentTeacherEditId = teacherId;
-                
-                document.getElementById('teacherName').value = teacher.name;
-                document.getElementById('teacherId').value = teacher.teacherId;
-                document.getElementById('teacherDesignation').value = teacher.designation;
-                document.getElementById('teacherSubject').value = teacher.subject;
-                document.getElementById('teacherMobile').value = teacher.mobile;
-                document.getElementById('teacherEmail').value = teacher.email;
-                document.getElementById('teacherSalary').value = teacher.salary;
-                document.getElementById('teacherJoiningDate').value = teacher.joiningDate;
-                document.getElementById('teacherNID').value = teacher.nid;
-                document.getElementById('teacherAddress').value = teacher.address;
-                document.getElementById('teacherPermanentAddress').value = teacher.permanentAddress;
-                document.getElementById('teacherType').value = teacher.type;
-                
-                document.getElementById('teacherModalTitle').textContent = 'শিক্ষক/কর্মচারী তথ্য এডিট করুন';
-                document.getElementById('addTeacherModal').classList.remove('hidden');
-            }
-        }
-
-        function resetTeacherForm() {
-            document.getElementById('teacherName').value = '';
-            document.getElementById('teacherId').value = '';
-            document.getElementById('teacherDesignation').value = '';
-            document.getElementById('teacherSubject').value = '';
-            document.getElementById('teacherMobile').value = '';
-            document.getElementById('teacherEmail').value = '';
-            document.getElementById('teacherSalary').value = '';
-            document.getElementById('teacherJoiningDate').value = new Date().toISOString().split('T')[0];
-            document.getElementById('teacherNID').value = '';
-            document.getElementById('teacherAddress').value = '';
-            document.getElementById('teacherPermanentAddress').value = '';
-            document.getElementById('teacherType').value = '';
-        }
-
-        // হাজিরা মডেল দেখাও
-        function showAttendanceModal() {
-            if (!currentUser || currentUser.role !== 'admin') {
-                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
-                return;
-            }
-            
-            document.getElementById('addAttendanceModal').classList.remove('hidden');
-            currentAttendanceEditId = null;
-            resetAttendanceForm();
-            loadTeacherOptions();
-            document.getElementById('attendanceModalTitle').textContent = 'নতুন হাজিরা যোগ করুন';
-            
-            // আজকের তারিখ সেট করুন
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('attendanceDate').value = today;
-        }
-
-        // শিক্ষক অপশন লোড
-        function loadTeacherOptions() {
-            const select = document.getElementById('attendanceTeacher');
-            select.innerHTML = '<option value="">নির্বাচন করুন</option>';
-            
-            teachers.forEach(teacher => {
-                const option = document.createElement('option');
-                option.value = teacher.id;
-                option.textContent = `${teacher.name} - ${teacher.designation}`;
-                option.setAttribute('data-designation', teacher.designation);
-                select.appendChild(option);
-            });
-        }
-
-        // পদবী আপডেট
-        function updateAttendanceDesignation() {
-            const select = document.getElementById('attendanceTeacher');
-            const selectedOption = select.options[select.selectedIndex];
-            const designation = selectedOption.getAttribute('data-designation') || '';
-            document.getElementById('attendanceDesignation').value = designation;
-        }
-
-        // ছুটির ধরন টগল
-        function toggleLeaveType() {
-            const status = document.getElementById('attendanceStatus').value;
-            const leaveTypeContainer = document.getElementById('leaveTypeContainer');
-            
-            if (status === 'leave') {
-                leaveTypeContainer.classList.remove('hidden');
-            } else {
-                leaveTypeContainer.classList.add('hidden');
-                document.getElementById('attendanceLeaveType').value = '';
-            }
-        }
-
-        // হাজিরা ফর্ম রিসেট
-        function resetAttendanceForm() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('attendanceDate').value = today;
-            document.getElementById('attendanceInTime').value = '09:00';
-            document.getElementById('attendanceOutTime').value = '17:00';
-            document.getElementById('attendanceTeacher').value = '';
-            document.getElementById('attendanceDesignation').value = '';
-            document.getElementById('attendanceStatus').value = 'present';
-            document.getElementById('attendanceLeaveType').value = '';
-            document.getElementById('attendanceComments').value = '';
-            document.getElementById('leaveTypeContainer').classList.add('hidden');
-        }
-
         function hideModal(modalId) {
             document.getElementById(modalId).classList.add('hidden');
         }
@@ -2717,8 +3428,66 @@
                     if (success) {
                         hideModal('addStudentModal');
                         showNotification(currentStudentEditId ? 'ছাত্র তথ্য আপডেট করা হয়েছে!' : 'নতুন ছাত্র যোগ করা হয়েছে!', 'success');
+                        loadStudents();
+                        updateDashboard();
                     }
                 });
+        }
+
+        function showAddStudentModal() {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
+                return;
+            }
+            document.getElementById('addStudentModal').classList.remove('hidden');
+            currentStudentEditId = null;
+            resetStudentForm();
+            document.getElementById('studentModalTitle').textContent = 'নতুন ছাত্র/ছাত্রী যোগ করুন';
+        }
+
+        function showEditStudentModal(studentId) {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
+                return;
+            }
+            
+            const student = students.find(s => s.id === studentId);
+            if (student) {
+                currentStudentEditId = studentId;
+                
+                document.getElementById('studentName').value = student.name;
+                document.getElementById('studentRoll').value = student.roll;
+                document.getElementById('studentClass').value = student.class;
+                document.getElementById('studentGender').value = student.gender;
+                document.getElementById('studentFather').value = student.fatherName;
+                document.getElementById('studentMother').value = student.motherName;
+                document.getElementById('studentIdNumber').value = student.studentIdNumber || '';
+                document.getElementById('studentMobile').value = student.mobile;
+                document.getElementById('studentEmail').value = student.email;
+                document.getElementById('studentVillage').value = student.village;
+                document.getElementById('studentUpazila').value = student.upazila;
+                document.getElementById('studentDistrict').value = student.district;
+                document.getElementById('studentAdmissionDate').value = student.admissionDate;
+                
+                document.getElementById('studentModalTitle').textContent = 'ছাত্র/ছাত্রী তথ্য এডিট করুন';
+                document.getElementById('addStudentModal').classList.remove('hidden');
+            }
+        }
+
+        function resetStudentForm() {
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentRoll').value = '';
+            document.getElementById('studentClass').value = '';
+            document.getElementById('studentGender').value = '';
+            document.getElementById('studentFather').value = '';
+            document.getElementById('studentMother').value = '';
+            document.getElementById('studentIdNumber').value = '';
+            document.getElementById('studentMobile').value = '';
+            document.getElementById('studentEmail').value = '';
+            document.getElementById('studentVillage').value = '';
+            document.getElementById('studentUpazila').value = '';
+            document.getElementById('studentDistrict').value = '';
+            document.getElementById('studentAdmissionDate').value = new Date().toISOString().split('T')[0];
         }
 
         function deleteStudent(studentId) {
@@ -2850,8 +3619,64 @@
                     if (success) {
                         hideModal('addTeacherModal');
                         showNotification(currentTeacherEditId ? 'শিক্ষক তথ্য আপডেট করা হয়েছে!' : 'নতুন শিক্ষক যোগ করা হয়েছে!', 'success');
+                        loadTeachers();
+                        updateDashboard();
                     }
                 });
+        }
+
+        function showAddTeacherModal() {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
+                return;
+            }
+            document.getElementById('addTeacherModal').classList.remove('hidden');
+            currentTeacherEditId = null;
+            resetTeacherForm();
+            document.getElementById('teacherModalTitle').textContent = 'নতুন শিক্ষক/কর্মচারী যোগ করুন';
+        }
+
+        function showEditTeacherModal(teacherId) {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
+                return;
+            }
+            
+            const teacher = teachers.find(t => t.id === teacherId);
+            if (teacher) {
+                currentTeacherEditId = teacherId;
+                
+                document.getElementById('teacherName').value = teacher.name;
+                document.getElementById('teacherId').value = teacher.teacherId;
+                document.getElementById('teacherDesignation').value = teacher.designation;
+                document.getElementById('teacherSubject').value = teacher.subject;
+                document.getElementById('teacherMobile').value = teacher.mobile;
+                document.getElementById('teacherEmail').value = teacher.email;
+                document.getElementById('teacherSalary').value = teacher.salary;
+                document.getElementById('teacherJoiningDate').value = teacher.joiningDate;
+                document.getElementById('teacherNID').value = teacher.nid;
+                document.getElementById('teacherAddress').value = teacher.address;
+                document.getElementById('teacherPermanentAddress').value = teacher.permanentAddress;
+                document.getElementById('teacherType').value = teacher.type;
+                
+                document.getElementById('teacherModalTitle').textContent = 'শিক্ষক/কর্মচারী তথ্য এডিট করুন';
+                document.getElementById('addTeacherModal').classList.remove('hidden');
+            }
+        }
+
+        function resetTeacherForm() {
+            document.getElementById('teacherName').value = '';
+            document.getElementById('teacherId').value = '';
+            document.getElementById('teacherDesignation').value = '';
+            document.getElementById('teacherSubject').value = '';
+            document.getElementById('teacherMobile').value = '';
+            document.getElementById('teacherEmail').value = '';
+            document.getElementById('teacherSalary').value = '';
+            document.getElementById('teacherJoiningDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('teacherNID').value = '';
+            document.getElementById('teacherAddress').value = '';
+            document.getElementById('teacherPermanentAddress').value = '';
+            document.getElementById('teacherType').value = '';
         }
 
         function deleteTeacher(teacherId) {
@@ -2942,6 +3767,8 @@
                         document.getElementById('financeAmount').value = '';
                         document.getElementById('financeDate').value = new Date().toISOString().split('T')[0];
                         showNotification('লেনদেন যোগ করা হয়েছে!', 'success');
+                        loadFinancialData();
+                        updateDashboard();
                     }
                 });
         }
@@ -2961,7 +3788,7 @@
             if (transactions.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="5" class="p-8 text-center text-gray-500">
+                        <td colspan="6" class="p-8 text-center text-gray-500">
                             <i class="fas fa-receipt text-4xl mb-3"></i>
                             <p class="text-lg font-medium">কোন লেনদেন নেই</p>
                             <p class="text-sm mt-2">নতুন লেনদেন যোগ করুন</p>
@@ -2978,6 +3805,9 @@
                     
                     return `
                         <tr class="border-b hover:bg-gray-50 transition duration-200">
+                            <td class="p-4">
+                                <div class="index-badge">${toBanglaNumber(index + 1)}</div>
+                            </td>
                             <td class="p-4 text-gray-700">${new Date(t.date).toLocaleDateString('bn-BD')}</td>
                             <td class="p-4 text-gray-700">${t.desc}</td>
                             <td class="p-4">
@@ -3119,6 +3949,9 @@
                 
                 return `
                     <tr class="border-b hover:bg-gray-50 transition duration-200">
+                        <td class="p-4">
+                            <div class="index-badge">${toBanglaNumber(index + 1)}</div>
+                        </td>
                         <td class="p-4 font-medium text-gray-800">${banglaDate}</td>
                         <td class="p-4">
                             <div class="font-semibold text-gray-800">${teacher.name || 'N/A'}</div>
@@ -3234,6 +4067,73 @@
             document.getElementById('attendanceLeaveCount').textContent = toBanglaNumber(leave);
         }
 
+        // হাজিরা যোগ করার মডেল দেখাও
+        function showAttendanceModal() {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
+                return;
+            }
+            
+            document.getElementById('addAttendanceModal').classList.remove('hidden');
+            currentAttendanceEditId = null;
+            resetAttendanceForm();
+            loadTeacherOptions();
+            document.getElementById('attendanceModalTitle').textContent = 'নতুন হাজিরা যোগ করুন';
+            
+            // আজকের তারিখ সেট করুন
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('attendanceDate').value = today;
+        }
+
+        // শিক্ষক অপশন লোড
+        function loadTeacherOptions() {
+            const select = document.getElementById('attendanceTeacher');
+            select.innerHTML = '<option value="">নির্বাচন করুন</option>';
+            
+            teachers.forEach(teacher => {
+                const option = document.createElement('option');
+                option.value = teacher.id;
+                option.textContent = `${teacher.name} - ${teacher.designation}`;
+                option.setAttribute('data-designation', teacher.designation);
+                select.appendChild(option);
+            });
+        }
+
+        // পদবী আপডেট
+        function updateAttendanceDesignation() {
+            const select = document.getElementById('attendanceTeacher');
+            const selectedOption = select.options[select.selectedIndex];
+            const designation = selectedOption.getAttribute('data-designation') || '';
+            document.getElementById('attendanceDesignation').value = designation;
+        }
+
+        // ছুটির ধরন টগল
+        function toggleLeaveType() {
+            const status = document.getElementById('attendanceStatus').value;
+            const leaveTypeContainer = document.getElementById('leaveTypeContainer');
+            
+            if (status === 'leave') {
+                leaveTypeContainer.classList.remove('hidden');
+            } else {
+                leaveTypeContainer.classList.add('hidden');
+                document.getElementById('attendanceLeaveType').value = '';
+            }
+        }
+
+        // হাজিরা ফর্ম রিসেট
+        function resetAttendanceForm() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('attendanceDate').value = today;
+            document.getElementById('attendanceInTime').value = '09:00';
+            document.getElementById('attendanceOutTime').value = '17:00';
+            document.getElementById('attendanceTeacher').value = '';
+            document.getElementById('attendanceDesignation').value = '';
+            document.getElementById('attendanceStatus').value = 'present';
+            document.getElementById('attendanceLeaveType').value = '';
+            document.getElementById('attendanceComments').value = '';
+            document.getElementById('leaveTypeContainer').classList.add('hidden');
+        }
+
         // হাজিরা সংরক্ষণ
         function saveAttendance() {
             if (!currentUser || currentUser.role !== 'admin') {
@@ -3290,6 +4190,8 @@
                     if (success) {
                         hideModal('addAttendanceModal');
                         showNotification(currentAttendanceEditId ? 'হাজিরা আপডেট করা হয়েছে!' : 'নতুন হাজিরা যোগ করা হয়েছে!', 'success');
+                        loadAttendanceTable();
+                        updateAttendanceSummary();
                     }
                 });
         }
@@ -3496,12 +4398,12 @@
             }
             
             // মাদ্রাসা কোড সেট করুন
-            console.log('মাদ্রাসা ম্যানেজমেন্ট সিস্টেম লোড হয়েছে');
+            console.log('মাদ্রাসা ম্যানেজমেন্ট সিস্টেম লোড হয়েছে');
             console.log('মাদ্রাসা কোড: ১৮৭৫২');
             console.log('EIIN No: ১৩০২৯০');
             console.log('মোবাইল: ০১৩০৯-১৩০২৯০');
             
-            // ওয়েলকাম মেসেজ
+            // ওয়েলকাম মেসেজ
             setTimeout(() => {
                 showNotification('মাদ্রাসা ম্যানেজমেন্ট সিস্টেমে স্বাগতম!', 'info');
             }, 1000);
@@ -3514,10 +4416,9 @@
         });
 
         window.addEventListener('offline', () => {
-            updateSyncStatus('অফলাইন মোড - স্থানীয় ডেটা দেখানো হচ্ছে');
+            updateSyncStatus('অফলাইন মোড - স্থানীয় ডেটা দেখানো হচ্ছে');
             showNotification('আপনি অফলাইনে আছেন', 'error');
         });
     </script>
 </body>
 </html>
-
