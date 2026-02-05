@@ -2408,7 +2408,7 @@
         let currentStudentEditId = null;
         let currentTeacherEditId = null;
         let currentAttendanceEditId = null;
-        let currentTransactionEditId = null; // নতুন ভেরিয়েবল
+        let currentTransactionEditId = null;
         let selectedRole = 'admin';
         
         // ডিলিট ভেরিয়েবল
@@ -2419,6 +2419,10 @@
         // রিসাইকেল বিন ভেরিয়েবল
         let restoreRecycleId = null;
         let permanentDeleteRecycleId = null;
+        let restoreItemType = null;
+        let restoreOriginalId = null;
+        let permanentDeleteItemType = null;
+        let permanentDeleteOriginalId = null;
 
         // বাংলা সংখ্যা কনভার্টার
         const banglaNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
@@ -2527,71 +2531,75 @@
             }
         }
 
-        // Firebase থেকে ডেটা লোড - শুধু isDeleted: false আইটেম লোড করো
+        // Firebase থেকে ডেটা লোড - পরিবর্তিত ভার্সন
         function loadDataFromFirebase() {
-            // ছাত্র ডেটা - শুধু isDeleted: false এমন আইটেম
-            database.ref('madrasa_18752/students').orderByChild('isDeleted').equalTo(false).on('value', (snapshot) => {
+            console.log("ডেটা লোড শুরু...");
+            
+            // ছাত্র ডেটা - শুধুমাত্র isDeleted: false আইটেমগুলো
+            database.ref('madrasa_18752/students').on('value', (snapshot) => {
                 students = [];
                 snapshot.forEach((childSnapshot) => {
                     const data = childSnapshot.val();
-                    // শুধু ডিলিট করা হয়নি এমন ছাত্র লোড করো
-                    if (data && data.id && data.isDeleted !== true) {
+                    if (data && (data.isDeleted === false || data.isDeleted === undefined)) {
                         students.push({ id: childSnapshot.key, ...data });
                     }
                 });
                 loadStudents();
                 updateDashboard();
                 updateSyncStatus('ছাত্র ডেটা সিঙ্ক হয়েছে');
+                console.log("ছাত্র লোডেড:", students.length);
             });
 
-            // শিক্ষক ডেটা
-            database.ref('madrasa_18752/teachers').orderByChild('isDeleted').equalTo(false).on('value', (snapshot) => {
+            // শিক্ষক ডেটা - শুধুমাত্র isDeleted: false আইটেমগুলো
+            database.ref('madrasa_18752/teachers').on('value', (snapshot) => {
                 teachers = [];
                 snapshot.forEach((childSnapshot) => {
                     const data = childSnapshot.val();
-                    if (data && data.id && data.isDeleted !== true) {
+                    if (data && (data.isDeleted === false || data.isDeleted === undefined)) {
                         teachers.push({ id: childSnapshot.key, ...data });
                     }
                 });
                 loadTeachers();
                 updateDashboard();
                 updateSyncStatus('শিক্ষক ডেটা সিঙ্ক হয়েছে');
+                console.log("শিক্ষক লোডেড:", teachers.length);
             });
 
-            // লেনদেন ডেটা
-            database.ref('madrasa_18752/transactions').orderByChild('isDeleted').equalTo(false).on('value', (snapshot) => {
+            // লেনদেন ডেটা - শুধুমাত্র isDeleted: false আইটেমগুলো
+            database.ref('madrasa_18752/transactions').on('value', (snapshot) => {
                 transactions = [];
                 snapshot.forEach((childSnapshot) => {
                     const data = childSnapshot.val();
-                    if (data && data.id && data.isDeleted !== true) {
+                    if (data && (data.isDeleted === false || data.isDeleted === undefined)) {
                         transactions.push({ id: childSnapshot.key, ...data });
                     }
                 });
                 loadFinancialData();
                 updateDashboard();
                 updateSyncStatus('লেনদেন ডেটা সিঙ্ক হয়েছে');
+                console.log("লেনদেন লোডেড:", transactions.length);
             });
 
-            // হাজিরা ডেটা
-            database.ref('madrasa_18752/attendance').orderByChild('isDeleted').equalTo(false).on('value', (snapshot) => {
+            // হাজিরা ডেটা - শুধুমাত্র isDeleted: false আইটেমগুলো
+            database.ref('madrasa_18752/attendance').on('value', (snapshot) => {
                 attendanceRecords = [];
                 snapshot.forEach((childSnapshot) => {
                     const data = childSnapshot.val();
-                    if (data && data.id && data.isDeleted !== true) {
+                    if (data && (data.isDeleted === false || data.isDeleted === undefined)) {
                         attendanceRecords.push({ id: childSnapshot.key, ...data });
                     }
                 });
                 loadAttendanceTable();
                 updateAttendanceSummary();
                 updateSyncStatus('হাজিরা ডেটা সিঙ্ক হয়েছে');
+                console.log("হাজিরা লোডেড:", attendanceRecords.length);
             });
             
-            // রিসাইকেল বিন ডেটা
+            // রিসাইকেল বিন ডেটা - শুধুমাত্র isDeleted: true আইটেমগুলো
             database.ref('madrasa_18752/recycle_bin').on('value', (snapshot) => {
                 recycleBinItems = [];
                 snapshot.forEach((childSnapshot) => {
                     const item = { id: childSnapshot.key, ...childSnapshot.val() };
-                    // শুধু ডিলিট করা আইটেম দেখাও (যেগুলো isDeleted: true)
                     if (item.isDeleted === true) {
                         recycleBinItems.push(item);
                     }
@@ -2599,6 +2607,7 @@
                 updateRecycleBinSummary();
                 loadRecycleBinTable();
                 updateSyncStatus('রিসাইকেল বিন আপডেট হয়েছে');
+                console.log("রিসাইকেল বিন আইটেম লোডেড:", recycleBinItems.length);
             });
         }
 
@@ -2635,7 +2644,7 @@
                 return database.ref(`${path}/${newId}`).set({ 
                     ...data, 
                     id: newId,
-                    isDeleted: false // নতুন আইটেমের জন্য isDeleted: false সেট
+                    isDeleted: false
                 })
                     .then(() => {
                         updateSyncStatus('ডেটা যোগ হয়েছে');
@@ -2648,10 +2657,12 @@
             }
         }
 
-        // আইটেম ডিলিট করার ফাংশন (মেইন ফাইল থেকে সরায় না, শুধু isDeleted: true করে)
+        // আইটেম ডিলিট করার ফাংশন (isDeleted: true করে এবং রিসাইকেল বিনে যোগ করে)
         function deleteItemFromFirebase(type, id, itemData, reason = 'ম্যানুয়ালি মুছে ফেলা হয়েছে') {
             const userEmail = currentUser ? currentUser.email : 'Unknown';
             const deletedAt = new Date().toISOString();
+            
+            console.log("ডিলিট ফাংশন কল, টাইপ:", type, "আইডি:", id);
             
             // প্রথমে আইটেমটিকে isDeleted: true করো
             return database.ref(`madrasa_18752/${type}/${id}`).update({
@@ -2661,6 +2672,8 @@
                 deleteReason: reason
             })
             .then(() => {
+                console.log("মূল আইটেম isDeleted: true করা হলো");
+                
                 // তারপর রিসাইকেল বিনে যোগ করো
                 const recycleData = {
                     itemType: type,
@@ -2672,9 +2685,12 @@
                     isDeleted: true
                 };
                 
+                console.log("রিসাইকেল ডেটা:", recycleData);
+                
                 return database.ref('madrasa_18752/recycle_bin').push(recycleData);
             })
-            .then(() => {
+            .then((result) => {
+                console.log("রিসাইকেল বিনে সফলভাবে যোগ হয়েছে");
                 return true;
             })
             .catch(error => {
@@ -2725,6 +2741,8 @@
         function loadRecycleBinTable() {
             const tbody = document.getElementById('recycleTableBody');
             const emptyRecycle = document.getElementById('emptyRecycle');
+            
+            console.log("রিসাইকেল বিন আইটেম সংখ্যা:", recycleBinItems.length);
             
             if (recycleBinItems.length === 0) {
                 tbody.innerHTML = '';
@@ -2827,6 +2845,17 @@
             }
         }
 
+        function getStatusText(status) {
+            const statusMap = {
+                'present': 'উপস্থিত',
+                'absent': 'অনুপস্থিত',
+                'late': 'বিলম্বিত',
+                'leave': 'ছুটি'
+            };
+            
+            return statusMap[status] || status;
+        }
+
         // পুনরুদ্ধার কনফার্মেশন দেখাও
         function showRestoreConfirmation(recycleId, itemType, originalId) {
             if (!currentUser || currentUser.role !== 'admin') {
@@ -2904,7 +2933,7 @@
             document.getElementById('permanentDeleteModal').classList.remove('hidden');
         }
 
-        // পুনরুদ্ধার ফাংশন
+        // পুনরুদ্ধার ফাংশন - পরিবর্তিত ভার্সন
         function confirmRestore() {
             if (!restoreRecycleId) {
                 hideModal('restoreConfirmModal');
@@ -2918,13 +2947,17 @@
                 return;
             }
             
-            // মূল আইটেমকে isDeleted: false করা
+            console.log("রিস্টোর শুরু:", recycleItem);
+            
+            // প্রথমে মূল আইটেমকে isDeleted: false করা
             database.ref(`madrasa_18752/${recycleItem.itemType}/${recycleItem.originalId}`).update({
                 isDeleted: false,
                 restoredAt: new Date().toISOString(),
                 restoredBy: currentUser.email
             })
             .then(() => {
+                console.log("মূল আইটেম isDeleted: false করা হলো");
+                
                 // রিসাইকেল বিন থেকে মুছে ফেলো
                 return deleteFromRecycleBin(restoreRecycleId);
             })
@@ -2957,9 +2990,13 @@
                 return;
             }
             
+            console.log("স্থায়ী ডিলিট শুরু:", recycleItem);
+            
             // প্রথমে মূল ডেটা থেকে সম্পূর্ণ মুছে ফেলো
             database.ref(`madrasa_18752/${recycleItem.itemType}/${recycleItem.originalId}`).remove()
                 .then(() => {
+                    console.log("মূল ডেটা মুছে ফেলা হলো");
+                    
                     // তারপর রিসাইকেল বিন থেকে মুছে ফেলো
                     return deleteFromRecycleBin(permanentDeleteRecycleId);
                 })
@@ -2974,6 +3011,7 @@
                 })
                 .catch(error => {
                     showNotification('মুছে ফেলতে সমস্যা হয়েছে!', 'error');
+                    console.error("স্থায়ী ডিলিট এরর:", error);
                 });
         }
 
@@ -3004,6 +3042,8 @@
             
             Promise.all(deletePromises)
                 .then(() => {
+                    console.log("সব মূল ডেটা মুছে ফেলা হলো");
+                    
                     // তারপর রিসাইকেল বিন খালি করো
                     return database.ref('madrasa_18752/recycle_bin').remove();
                 })
@@ -3015,6 +3055,7 @@
                 })
                 .catch(error => {
                     showNotification('রিসাইকেল বিন খালি করতে সমস্যা হয়েছে!', 'error');
+                    console.error("রিসাইকেল বিন খালি করতে সমস্যা:", error);
                 });
         }
 
@@ -3024,6 +3065,8 @@
                 showNotification('শুধুমাত্র এডমিন এই ফিচার ব্যবহার করতে পারেন!', 'error');
                 return;
             }
+            
+            console.log("ডিলিট কনফার্মেশন শো করা:", type, id);
             
             deleteType = type;
             deleteId = id;
@@ -3101,23 +3144,14 @@
             document.getElementById('deleteConfirmModal').classList.remove('hidden');
         }
 
-        function getStatusText(status) {
-            const statusMap = {
-                'present': 'উপস্থিত',
-                'absent': 'অনুপস্থিত',
-                'late': 'বিলম্বিত',
-                'leave': 'ছুটি'
-            };
-            
-            return statusMap[status] || status;
-        }
-
         // ডিলিট কনফার্মেশন (isDeleted: true করা)
         function confirmDelete() {
             if (!deleteType || !deleteId) {
                 hideModal('deleteConfirmModal');
                 return;
             }
+            
+            console.log("ডিলিট নিশ্চিত করা হলো:", deleteType, deleteId);
             
             deleteItemFromFirebase(deleteType, deleteId, deleteItemData, 'ম্যানুয়ালি মুছে ফেলা হয়েছে')
                 .then(success => {
@@ -3163,7 +3197,7 @@
             deleteItemData = null;
         }
 
-        // লগইন সিস্টেম
+        // লগইন সিস্টেম - রিফ্রেশ রেজিস্ট্যান্স
         function login() {
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value.trim();
@@ -3209,6 +3243,12 @@
 
         function handleSuccessfulLogin() {
             try {
+                // লগইন অবস্থা localStorage এ সংরক্ষণ
+                localStorage.setItem('madrasaLoggedIn', 'true');
+                localStorage.setItem('madrasaUserRole', currentUser.role);
+                localStorage.setItem('madrasaUserName', currentUser.name);
+                localStorage.setItem('madrasaUserEmail', currentUser.email);
+                
                 // লগইন মডেল লুকাও
                 document.getElementById('loginModal').classList.add('hidden');
                 
@@ -3238,9 +3278,42 @@
                     localStorage.removeItem('rememberedRole');
                 }
                 
+                showNotification('সফলভাবে লগইন হয়েছে!', 'success');
+                
             } catch (error) {
                 console.error("Error in handleSuccessfulLogin:", error);
                 showNotification('লগইন প্রসেসে সমস্যা হয়েছে। পেজ রিফ্রেশ করুন।', 'error');
+            }
+        }
+
+        // লগইন অবস্থা চেক করার ফাংশন
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('madrasaLoggedIn');
+            
+            if (isLoggedIn === 'true') {
+                // ইউজার ইনফো রিকভার করো
+                const userRole = localStorage.getItem('madrasaUserRole');
+                const userName = localStorage.getItem('madrasaUserName');
+                const userEmail = localStorage.getItem('madrasaUserEmail');
+                
+                if (userRole && userName && userEmail) {
+                    currentUser = {
+                        role: userRole,
+                        name: userName,
+                        email: userEmail
+                    };
+                    
+                    // অটোমেটিক লগইন
+                    document.getElementById('loginModal').classList.add('hidden');
+                    document.getElementById('appContent').classList.remove('hidden');
+                    updateUIForUserRole();
+                    loadDataFromFirebase();
+                    updateBanglaDate();
+                    setInterval(updateBanglaDate, 60000);
+                    showSection('dashboard');
+                    
+                    showNotification(`স্বাগতম ${userName}!`, 'info');
+                }
             }
         }
 
@@ -3264,6 +3337,12 @@
 
         // লগআউট এক্সিকিউট
         function performLogout() {
+            // localStorage থেকে লগইন ডেটা মুছে ফেলো
+            localStorage.removeItem('madrasaLoggedIn');
+            localStorage.removeItem('madrasaUserRole');
+            localStorage.removeItem('madrasaUserName');
+            localStorage.removeItem('madrasaUserEmail');
+            
             hideModal('logoutModal');
             
             // অ্যাপ কন্টেন্ট লুকাও
@@ -4409,6 +4488,9 @@
                     if (e.key === 'Enter') login();
                 });
             }
+            
+            // লগইন অবস্থা চেক
+            checkLoginStatus();
             
             // ওয়েলকাম মেসেজ
             setTimeout(() => {
